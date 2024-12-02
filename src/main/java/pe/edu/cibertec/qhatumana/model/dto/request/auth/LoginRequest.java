@@ -1,4 +1,4 @@
-package pe.edu.cibertec.qhatumana.model.dto.request;
+package pe.edu.cibertec.qhatumana.model.dto.request.auth;
 
 import lombok.Data;
 

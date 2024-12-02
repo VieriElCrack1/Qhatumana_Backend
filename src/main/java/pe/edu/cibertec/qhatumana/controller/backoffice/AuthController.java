@@ -13,9 +13,9 @@ import org.springframework.security.web.authentication.logout.SecurityContextLog
 import org.springframework.web.bind.annotation.*;
 import pe.edu.cibertec.qhatumana.model.bd.EnlaceMenu;
 import pe.edu.cibertec.qhatumana.model.bd.Usuario;
-import pe.edu.cibertec.qhatumana.model.dto.request.AuthCreateUserRequest;
-import pe.edu.cibertec.qhatumana.model.dto.request.AuthLoginRequest;
-import pe.edu.cibertec.qhatumana.model.dto.response.AuthResponse;
+import pe.edu.cibertec.qhatumana.model.dto.request.auth.AuthCreateUserRequest;
+import pe.edu.cibertec.qhatumana.model.dto.request.auth.AuthLoginRequest;
+import pe.edu.cibertec.qhatumana.model.dto.response.auth.AuthResponse;
 import pe.edu.cibertec.qhatumana.service.Impl.UsuarioService;
 import pe.edu.cibertec.qhatumana.service.interfaces.IEnlaceMenuService;
 import pe.edu.cibertec.qhatumana.service.interfaces.IUsuarioService;
