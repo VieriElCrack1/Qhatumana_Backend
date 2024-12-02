@@ -1,8 +1,9 @@
-package pe.edu.cibertec.qhatumana.util.angular;
+package pe.edu.cibertec.qhatumana.config.cors;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import pe.edu.cibertec.qhatumana.util.angular.AngularUtil;
 
 @Configuration
 public class AngularWebConfig implements WebMvcConfigurer {

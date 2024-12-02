@@ -1,4 +1,4 @@
-package pe.edu.cibertec.qhatumana.model.dto.response;
+package pe.edu.cibertec.qhatumana.model.dto.response.auth;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 

@@ -1,11 +1,13 @@
 package pe.edu.cibertec.qhatumana.model.bd;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "usuario")
@@ -34,5 +36,9 @@ public class Usuario {
     @JoinColumn(name = "idrol", nullable = false)
     @ManyToOne
     private Rol rol;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "usuario")
+    private List<Pedido> pedidoList;
 
 }
