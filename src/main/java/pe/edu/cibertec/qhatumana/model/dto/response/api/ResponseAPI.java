@@ -1,4 +1,4 @@
-package pe.edu.cibertec.qhatumana.model.dto.response.cliente;
+package pe.edu.cibertec.qhatumana.model.dto.response.api;
 
 import lombok.Builder;
 import lombok.Data;

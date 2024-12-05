@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import pe.edu.cibertec.qhatumana.model.dto.request.cliente.ClienteCreateRequest;
 import pe.edu.cibertec.qhatumana.model.dto.request.cliente.ClienteUpdateRequest;
 import pe.edu.cibertec.qhatumana.model.dto.response.cliente.ClienteResponse;
-import pe.edu.cibertec.qhatumana.model.dto.response.cliente.ResponseAPI;
+import pe.edu.cibertec.qhatumana.model.dto.response.api.ResponseAPI;
 import pe.edu.cibertec.qhatumana.service.interfaces.IClienteService;
 
 import java.util.List;

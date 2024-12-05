@@ -7,7 +7,7 @@ import pe.edu.cibertec.qhatumana.model.bd.Cliente;
 import pe.edu.cibertec.qhatumana.model.dto.request.cliente.ClienteCreateRequest;
 import pe.edu.cibertec.qhatumana.model.dto.request.cliente.ClienteUpdateRequest;
 import pe.edu.cibertec.qhatumana.model.dto.response.cliente.ClienteResponse;
-import pe.edu.cibertec.qhatumana.model.dto.response.cliente.ResponseAPI;
+import pe.edu.cibertec.qhatumana.model.dto.response.api.ResponseAPI;
 import pe.edu.cibertec.qhatumana.repository.ClienteRepository;
 import pe.edu.cibertec.qhatumana.service.interfaces.IClienteService;
 

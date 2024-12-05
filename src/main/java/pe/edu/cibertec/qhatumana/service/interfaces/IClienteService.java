@@ -3,7 +3,7 @@ package pe.edu.cibertec.qhatumana.service.interfaces;
 import pe.edu.cibertec.qhatumana.model.dto.request.cliente.ClienteCreateRequest;
 import pe.edu.cibertec.qhatumana.model.dto.request.cliente.ClienteUpdateRequest;
 import pe.edu.cibertec.qhatumana.model.dto.response.cliente.ClienteResponse;
-import pe.edu.cibertec.qhatumana.model.dto.response.cliente.ResponseAPI;
+import pe.edu.cibertec.qhatumana.model.dto.response.api.ResponseAPI;
 
 import java.util.List;
 
