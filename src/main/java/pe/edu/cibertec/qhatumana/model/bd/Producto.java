@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -20,7 +19,7 @@ public class Producto {
     @ManyToOne
     @JoinColumn(name = "idcategoria", nullable = false)
     private Categoria categoria;
-    private BigDecimal precio;
+    private Double precio;
     private Integer stock;
     private LocalDate fechareg;
     @ManyToOne

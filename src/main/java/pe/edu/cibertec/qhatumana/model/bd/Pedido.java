@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -27,9 +26,9 @@ public class Pedido {
     private Usuario usuario;
     @Temporal(TemporalType.DATE)
     private LocalDate fechareg;
-    private BigDecimal igv;
-    private BigDecimal descuento;
-    private BigDecimal montototal;
+    private Double igv;
+    private Double descuento;
+    private Double montototal;
     private String direccion;
     @ManyToOne
     @JoinColumn(name = "idestado", nullable = false)

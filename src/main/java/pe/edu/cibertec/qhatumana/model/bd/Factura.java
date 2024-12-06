@@ -3,7 +3,6 @@ package pe.edu.cibertec.qhatumana.model.bd;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Data
@@ -19,5 +18,5 @@ public class Factura {
     private String numfactura;
     @Temporal(TemporalType.DATE)
     private LocalDate fechareg;
-    private BigDecimal montototal;
+    private Double montototal;
 }
