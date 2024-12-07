@@ -33,7 +33,7 @@ public class JwtUtil {
                 .map(GrantedAuthority::getAuthority).collect(Collectors.joining(","));
         String jwtToken = JWT.create().withIssuer(userGenerator).withSubject(username)
                 .withClaim("authorities", authorities).withIssuedAt(new Date())
-                .withExpiresAt(new Date(System.currentTimeMillis() + 60000)) //en media hora se vence el token
+                .withExpiresAt(new Date(System.currentTimeMillis() + 1800000)) //en media hora se vence el token
                 .withJWTId(UUID.randomUUID().toString())
                 .withNotBefore(new Date(System.currentTimeMillis()))
                 .sign(algorithm);
