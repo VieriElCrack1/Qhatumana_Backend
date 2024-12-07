@@ -14,8 +14,6 @@ class QhatumanaApplicationTests {
 	@Autowired
 	private IUsuarioService usuarioService;
 
-
-
 	@Test
 	void contextLoads() {
 		try {
@@ -31,7 +29,6 @@ class QhatumanaApplicationTests {
 			u.setNomfoto("vacio");
 			u.setFechareg(LocalDate.now());
 			u.setDni("82818281");
-			//u.setIdrol(1);
 			u.setEstado(true);
 			usuarioService.guardarUsuario(u);
 		}catch (Exception e) {

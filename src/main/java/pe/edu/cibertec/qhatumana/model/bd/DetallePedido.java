@@ -5,13 +5,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
-
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Entity
-@Table(name = "detallepedido")
+@Table(name = "pedidodetalle")
 public class DetallePedido {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,6 +21,6 @@ public class DetallePedido {
     @JoinColumn(name = "idproducto", nullable = false)
     private Producto producto;
     private Integer cantidad;
-    private BigDecimal precio;
-    private BigDecimal subtotal;
+    private Double precio;
+    private Double subtotal;
 }

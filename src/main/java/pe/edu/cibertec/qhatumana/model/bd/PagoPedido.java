@@ -3,7 +3,6 @@ package pe.edu.cibertec.qhatumana.model.bd;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Data
@@ -16,7 +15,7 @@ public class PagoPedido {
     @ManyToOne
     @JoinColumn(name = "idpedido", nullable = false)
     private Pedido pedido;
-    private BigDecimal montopagado;
+    private Double montopagado;
     @ManyToOne
     @JoinColumn(name = "idmetodopago", nullable = false)
     private MetodoPago metodoPago;

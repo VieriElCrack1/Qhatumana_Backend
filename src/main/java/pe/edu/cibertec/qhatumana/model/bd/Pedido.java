@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -19,24 +18,24 @@ public class Pedido {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idpedido;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "idcliente", nullable = false)
     private Cliente cliente;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "idusuario", nullable = false)
     private Usuario usuario;
     @Temporal(TemporalType.DATE)
-    private LocalDate fechareg;
-    private BigDecimal igv;
-    private BigDecimal descuento;
-    private BigDecimal montototal;
+    private LocalDate fechapedido;
+    private Double igv;
+    private Double descuento;
+    private Double montototal;
     private String direccion;
     @ManyToOne
     @JoinColumn(name = "idestado", nullable = false)
     private EstadoPedido estadoPedido;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "pedido")
+    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<DetallePedido> detallePedidoList;
 
     @JsonIgnore
@@ -53,5 +52,5 @@ public class Pedido {
 
     @JsonIgnore
     @OneToMany(mappedBy = "pedido")
-    private List<DevolucionPedido> devolucionPedidoList;
+    private List<DevolucionProducto> devolucionPedidoList;
 }

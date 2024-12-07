@@ -1,6 +1,7 @@
 package pe.edu.cibertec.qhatumana.controller.backoffice;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +12,9 @@ import pe.edu.cibertec.qhatumana.model.dto.response.cliente.ClienteResponse;
 import pe.edu.cibertec.qhatumana.model.dto.response.api.ResponseAPI;
 import pe.edu.cibertec.qhatumana.service.interfaces.IClienteService;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @RestController
@@ -90,7 +93,22 @@ public class ClienteController {
     }
 
     @GetMapping("/buscar/{idcliente}")
-    public ResponseEntity<ClienteResponse> buscarCliente(@PathVariable("idcliente") Integer idcliente) {
-        return new ResponseEntity<>(clienteService.buscarCliente(idcliente), HttpStatus.OK);
+    public ResponseEntity<Map<String, Object>> buscarCliente(@PathVariable("idcliente") Integer idcliente) {
+        Map<String, Object> respuesta = new HashMap<>();
+        try {
+            ClienteResponse response = clienteService.buscarCliente(idcliente);
+            respuesta.put("message", "Cliente Encontrado");
+            respuesta.put("status", "EXITO");
+            respuesta.put("data", response);
+        }catch (DataAccessException e) {
+            respuesta.put("message", "No se pudo acceder a la base de datos");
+            respuesta.put("status", "ERROR");
+            return new ResponseEntity<>(respuesta, HttpStatus.INTERNAL_SERVER_ERROR);
+        }catch (Exception e) {
+            respuesta.put("message", "Hubo un error al buscar el cliente");
+            respuesta.put("status", "ERROR");
+            return new ResponseEntity<>(respuesta, HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(respuesta, HttpStatus.OK);
     }
 }
