@@ -25,6 +25,8 @@ public class Producto {
     @ManyToOne
     @JoinColumn(name = "idproveedor", nullable = false)
     private Proveedor proveedor;
+    private String urlproducto;
+    private String urlnombre;
     private Boolean estado;
 
     @JsonIgnore

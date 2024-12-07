@@ -1,9 +1,8 @@
 package pe.edu.cibertec.qhatumana.model.bd;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
@@ -37,7 +36,6 @@ public class Usuario {
     @ManyToOne
     private Rol rol;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "usuario")
     private List<Pedido> pedidoList;
 

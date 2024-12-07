@@ -6,8 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
-import pe.edu.cibertec.qhatumana.model.dto.request.pedido.PedidoCreateRequest;
-import pe.edu.cibertec.qhatumana.model.dto.request.pedido.PedidoUpdateRequest;
+import pe.edu.cibertec.qhatumana.model.dto.request.pedido.PedidoAndDetalleCreateRequest;
+import pe.edu.cibertec.qhatumana.model.dto.request.pedido.PedidoAndDetalleUpdateRequest;
 import pe.edu.cibertec.qhatumana.model.dto.response.api.ResponseAPI;
 import pe.edu.cibertec.qhatumana.model.dto.response.pedido.PedidoListResponse;
 import pe.edu.cibertec.qhatumana.model.dto.response.pedido.PedidoResponse;
@@ -44,13 +44,13 @@ public class PedidoController {
     }
 
     @PostMapping("/registrar")
-    public ResponseEntity<ResponseAPI<PedidoResponse>> registrarPedido(@RequestBody PedidoCreateRequest request) {
+    public ResponseEntity<ResponseAPI<PedidoResponse>> registrarPedido(@RequestBody PedidoAndDetalleCreateRequest request) {
         ResponseAPI<PedidoResponse> response = pedidoService.registrarPedido(request);
         return new ResponseEntity<>(response, HttpStatus.valueOf(response.getHttpStatus()));
     }
 
     @PutMapping("/modificar")
-    public ResponseEntity<ResponseAPI<PedidoResponse>> actualizarPedido(@RequestBody PedidoUpdateRequest request) {
+    public ResponseEntity<ResponseAPI<PedidoResponse>> actualizarPedido(@RequestBody PedidoAndDetalleUpdateRequest request) {
         ResponseAPI<PedidoResponse> response = pedidoService.actualizarPedido(request);
         return new ResponseEntity<>(response, HttpStatus.valueOf(response.getHttpStatus()));
     }

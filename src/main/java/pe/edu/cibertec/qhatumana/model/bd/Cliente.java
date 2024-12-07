@@ -1,6 +1,5 @@
 package pe.edu.cibertec.qhatumana.model.bd;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -22,7 +21,6 @@ public class Cliente {
     private LocalDate fechareg;
     private Boolean estado;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "cliente")
     private List<Pedido> estadoPedidoList;
 }
