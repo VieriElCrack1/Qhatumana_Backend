@@ -7,6 +7,5 @@ import java.util.List;
 public interface IEnlaceMenuService {
     List<EnlaceMenu> listadoEnlaceMenus();
     EnlaceMenu buscarEnlaceMenu(int id);
-    int obtenerIdEnlaceMenu();
     List<EnlaceMenu> traerEnlaceUsuario(int codRol);
 }

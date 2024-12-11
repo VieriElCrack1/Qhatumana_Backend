@@ -17,6 +17,7 @@ import pe.edu.cibertec.qhatumana.model.dto.response.pedido.PedidoResponse;
 import pe.edu.cibertec.qhatumana.model.dto.response.pedido.detalle.DetallePedidoResponse;
 import pe.edu.cibertec.qhatumana.repository.*;
 import pe.edu.cibertec.qhatumana.service.interfaces.IPedidoService;
+import pe.edu.cibertec.qhatumana.util.exception.handler.ResourceNotFoundException;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -45,10 +46,10 @@ public class PedidoService implements IPedidoService {
         try {
             Pedido pedido = new Pedido();
             //atributos
-            Cliente cliente = clienteRepository.findById(request.getIdcliente()).orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
+            Cliente cliente = clienteRepository.findById(request.getIdcliente()).orElseThrow(() -> new ResourceNotFoundException("Cliente no encontrado"));
             pedido.setCliente(cliente);
 
-            Usuario usuario = usuarioRepository.findById(request.getIdusuario()).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+            Usuario usuario = usuarioRepository.findById(request.getIdusuario()).orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado"));
             pedido.setUsuario(usuario);
 
             pedido.setFechapedido(LocalDate.now());
@@ -57,7 +58,7 @@ public class PedidoService implements IPedidoService {
             pedido.setMontototal(request.getMontototal());
             pedido.setDireccion(request.getDireccion());
 
-            EstadoPedido estadoPedido = estadoPedidoRepository.findById(request.getIdestado()).orElseThrow(() -> new RuntimeException("No se encontró ningun estado pedido"));
+            EstadoPedido estadoPedido = estadoPedidoRepository.findById(request.getIdestado()).orElseThrow(() -> new ResourceNotFoundException("No se encontró ningun estado pedido"));
             pedido.setEstadoPedido(estadoPedido);
 
             List<DetallePedido> detallePedidos = new ArrayList<>();
@@ -65,7 +66,7 @@ public class PedidoService implements IPedidoService {
                 DetallePedido detalle = new DetallePedido();
                 detalle.setPedido(pedido);
 
-                Producto producto = productoRepository.findById(detalleRequest.getIdproducto()).orElseThrow(() -> new RuntimeException("No se encontró el producto"));
+                Producto producto = productoRepository.findById(detalleRequest.getIdproducto()).orElseThrow(() -> new ResourceNotFoundException("No se encontró el producto"));
 
                 if(producto.getStock() < detalleRequest.getCantidad()) {
                     return ResponseAPI.<PedidoResponse>builder()
@@ -96,6 +97,7 @@ public class PedidoService implements IPedidoService {
                   .status("ERROR")
                   .httpStatus(HttpStatus.INTERNAL_SERVER_ERROR.value())
                   .errorCode(HttpStatus.INTERNAL_SERVER_ERROR.name())
+                  .messageDescription(e.getMessage())
                   .build();
         } catch (Exception e) {
             return ResponseAPI.<PedidoResponse>builder()
@@ -103,6 +105,7 @@ public class PedidoService implements IPedidoService {
                     .status("ERROR")
                     .httpStatus(HttpStatus.BAD_REQUEST.value())
                     .errorCode(HttpStatus.BAD_REQUEST.name())
+                    .messageDescription(e.getMessage())
                     .build();
         }
         return ResponseAPI.<PedidoResponse>builder()
@@ -119,19 +122,26 @@ public class PedidoService implements IPedidoService {
     public ResponseAPI<PedidoResponse> actualizarPedido(PedidoAndDetalleUpdateRequest request) {
         Pedido update;
         try{
-            Pedido pedido = pedidoRepository.findById(request.getIdpedido()).orElseThrow(() -> new RuntimeException("No se encontro el pedido : " + request.getIdpedido()));
-
-            Cliente cliente = clienteRepository.findById(request.getIdcliente()).orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
+            Pedido pedido = pedidoRepository.findById(request.getIdpedido()).orElseThrow(() -> new ResourceNotFoundException("No se encontro el pedido : " + request.getIdpedido()));
+            if(pedido.getEstadoPedido().getNomestado().equalsIgnoreCase("Entregado")) {
+                return ResponseAPI.<PedidoResponse>builder()
+                        .message("El pedido ya esta entregado, no se puede actualizar")
+                        .data(convertirPedidoResponse(pedido))
+                        .status("EXITO")
+                        .httpStatus(HttpStatus.OK.value())
+                        .build();
+            }
+            Cliente cliente = clienteRepository.findById(request.getIdcliente()).orElseThrow(() -> new ResourceNotFoundException("Cliente no encontrado"));
             pedido.setCliente(cliente);
 
-            Usuario usuario = usuarioRepository.findById(request.getIdusuario()).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+            Usuario usuario = usuarioRepository.findById(request.getIdusuario()).orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado"));
             pedido.setUsuario(usuario);
 
             pedido.setDescuento(request.getDescuento());
             pedido.setMontototal(request.getMontototal());
             pedido.setDireccion(request.getDireccion());
 
-            EstadoPedido estadoPedido = estadoPedidoRepository.findById(request.getIdestado()).orElseThrow(() -> new RuntimeException("No se encontró ningun estado pedido"));
+            EstadoPedido estadoPedido = estadoPedidoRepository.findById(request.getIdestado()).orElseThrow(() -> new ResourceNotFoundException("No se encontró ningun estado pedido"));
             pedido.setEstadoPedido(estadoPedido);
 
             List<DetallePedido> detallePedidos = new ArrayList<>();
@@ -169,6 +179,7 @@ public class PedidoService implements IPedidoService {
                     .status("ERROR")
                     .httpStatus(HttpStatus.INTERNAL_SERVER_ERROR.value())
                     .errorCode(HttpStatus.INTERNAL_SERVER_ERROR.name())
+                    .messageDescription(e.getMessage())
                     .build();
         } catch (Exception e) {
             return ResponseAPI.<PedidoResponse>builder()
@@ -176,6 +187,7 @@ public class PedidoService implements IPedidoService {
                     .status("ERROR")
                     .httpStatus(HttpStatus.BAD_REQUEST.value())
                     .errorCode(HttpStatus.BAD_REQUEST.name())
+                    .messageDescription(e.getMessage())
                     .build();
         }
         return ResponseAPI.<PedidoResponse>builder()
@@ -188,7 +200,7 @@ public class PedidoService implements IPedidoService {
 
     @Override
     public PedidoResponse buscarPedido(int idpedido) {
-        return convertirPedidoResponse(pedidoRepository.findById(idpedido).orElseThrow(() -> new RuntimeException("No se encontro ningun pedido al id : " + idpedido)));
+        return convertirPedidoResponse(pedidoRepository.findById(idpedido).orElseThrow(() -> new ResourceNotFoundException("No se encontro ningun pedido al id : " + idpedido)));
     }
 
     private List<PedidoListResponse> convertirPedidosListResponse(List<Pedido> pedidos) {

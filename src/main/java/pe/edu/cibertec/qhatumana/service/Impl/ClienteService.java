@@ -10,6 +10,7 @@ import pe.edu.cibertec.qhatumana.model.dto.response.cliente.ClienteResponse;
 import pe.edu.cibertec.qhatumana.model.dto.response.api.ResponseAPI;
 import pe.edu.cibertec.qhatumana.repository.ClienteRepository;
 import pe.edu.cibertec.qhatumana.service.interfaces.IClienteService;
+import pe.edu.cibertec.qhatumana.util.exception.handler.ResourceNotFoundException;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -50,7 +51,7 @@ public class ClienteService implements IClienteService {
     @Override
     public ResponseAPI<ClienteResponse> updateCliente(ClienteUpdateRequest request) {
         Cliente cliente = clienteRepository.findById(request.getIdcliente())
-                .orElseThrow(() -> new RuntimeException("No se encontro el cliente"));
+                .orElseThrow(() -> new ResourceNotFoundException("No se encontro el cliente"));
 
         cliente.setNomcliente(request.getNomcliente());
         cliente.setApecliente(request.getApecliente());
@@ -72,7 +73,7 @@ public class ClienteService implements IClienteService {
     @Override
     public ClienteResponse buscarCliente(int idcliente) {
         Cliente cliente = clienteRepository.findById(idcliente)
-                .orElseThrow(() -> new RuntimeException("No se encontro el cliente"));
+                .orElseThrow(() -> new ResourceNotFoundException("No se encontro el cliente"));
         return convertirClienteResponse(cliente);
     }
 

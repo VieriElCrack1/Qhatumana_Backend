@@ -68,7 +68,7 @@ public class PedidoController {
             respuesta.put("status", "ERROR");
             return new ResponseEntity<>(respuesta, HttpStatus.INTERNAL_SERVER_ERROR);
         }catch (Exception e) {
-            respuesta.put("message", "Hubo un error al buscar el pedido");
+            respuesta.put("message", "Hubo un error al buscar el pedido : " + e.getMessage());
             respuesta.put("status", "ERROR");
             return new ResponseEntity<>(respuesta, HttpStatus.BAD_REQUEST);
         }
