@@ -20,5 +20,6 @@ public class PagoPedido {
     @JoinColumn(name = "idmetodopago", nullable = false)
     private MetodoPago metodoPago;
     @Temporal(TemporalType.DATE)
-    private LocalDate fechareg;
+    private LocalDate fechapago;
+    private Boolean estado;
 }

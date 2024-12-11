@@ -6,5 +6,5 @@ import pe.edu.cibertec.qhatumana.model.bd.PagoPedido;
 
 @Repository
 public interface PagoPedidoRepository extends JpaRepository<PagoPedido, Integer> {
-
+    boolean existsByPedidoIdpedidoAndEstadoTrue(Integer idpedido);
 }

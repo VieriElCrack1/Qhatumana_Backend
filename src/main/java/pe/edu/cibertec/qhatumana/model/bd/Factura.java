@@ -19,4 +19,5 @@ public class Factura {
     @Temporal(TemporalType.DATE)
     private LocalDate fechareg;
     private Double montototal;
+    private Boolean estadofactura;
 }

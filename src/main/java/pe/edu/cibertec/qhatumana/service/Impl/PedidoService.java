@@ -123,7 +123,14 @@ public class PedidoService implements IPedidoService {
         Pedido update;
         try{
             Pedido pedido = pedidoRepository.findById(request.getIdpedido()).orElseThrow(() -> new ResourceNotFoundException("No se encontro el pedido : " + request.getIdpedido()));
-
+            if(pedido.getEstadoPedido().getNomestado().equalsIgnoreCase("Entregado")) {
+                return ResponseAPI.<PedidoResponse>builder()
+                        .message("El pedido ya esta entregado, no se puede actualizar")
+                        .data(convertirPedidoResponse(pedido))
+                        .status("EXITO")
+                        .httpStatus(HttpStatus.OK.value())
+                        .build();
+            }
             Cliente cliente = clienteRepository.findById(request.getIdcliente()).orElseThrow(() -> new ResourceNotFoundException("Cliente no encontrado"));
             pedido.setCliente(cliente);
 

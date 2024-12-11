@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "fir-spring-ecoomerce",
+  "private_key_id": "c04ca83d6d4d120966eb67553a2667cbdc18508a",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC1hHUspqyZqij/\nDLIO7dJuQGyOT5aKRMOVgQZLrOS5KXKCp5ASB/40cokmBc+XwtRmUIrHNLo5HaMp\nv6KQ4uJJr3SIc8gwNKtTYA2w2ihub/6nH2czKTIN/qII/KCNeAuPnOCCveIpE/OW\nM0xoS3jfBm8O0Xkg86ax4McenO+hDYiFX/7h0d5Qgp3UwymTLrvjsa3Z6SMbe8ps\neFCyZ5Gt0O9IsuJ6U6CVoBCuU80ohAx+h8kppOYkJjcgH65BQCLJUfQ6wxwyQJpQ\nbD4VeDmk7tndv4fvLwRbqV0ddmFrZKsWLdUBF3qXpmpLdeIyuwo64boU303aMP97\nF8XoWlBdAgMBAAECggEAVv3urCILCTAAKs+6TCZVGcqdXAyvkH+JHo7x5fWrvkOr\nYguNI98ZyKf1q7fQOCLC6XADOpo9/16BUmJJtldN7NN+LWET2Wp8i1424YGEK/1X\nlV+a9W1yVDurC1SLW5FjNQYRoQcAqwApVtwp67fz6yrpsbfZbd3nj0szEqxSuaN0\nNmBl/7CYFdfy2HLLEzFddvrDPTeDIEUG+U4kLc6J0nR2eLthsBuRVk3NY5kQIPdo\nzA4X3gFFXKZ42K/uA9lRtBnEnoT4KRoRLIQs9nBrrLY6rOSpAmz+9K5KXrxp+YLS\n3f33lcHKwQjZ+AWZboRWFYwZPXGl44LBkq/mRiftjwKBgQDKRkxWUH1Vrj3cZyc+\nxaltDQAoob9JQ7yk336unE0RLPlShkMZC1pfuyJxTZ6F2LS4auNg8p7dUUB7wud8\nSjyZFDiOjimG28IfTBxOMW554YELI59D8+/fUo18j2XEUhnPS/ALcakK3zPvyBWO\nnn0Pu25nIaQ4kUola+U3quhJFwKBgQDlusUyeNlUhvatyjxwr4fnFP7HWZVNaJ6L\nz2saSeMQb5OqOyD2ZIKb0/9hJwGDj6p5Gv/Dr1aiI2xWA3ImF1hCcE7QlpFnFydH\nSK9vOC2kxoXcbWSbBYltOoY7CxkIFcCqRKINU720n56RzPfQpVs2z0KgJQlL0+PE\nHkW4400yqwKBgDlt0hiji6I68UdVZjgVSLA0g7oFiljTyYiKB96tc9gPi84ZXo2K\nwqLxb6r5natkxpKhjmMlH2O4wPUidjS8ow3XRuN6i2HFnQzjwBmXQUWLd+bgu0RA\nyvb96jvWPs+Je9h2N/YX1CXJD2bhyPUQHHPOBF91lrmUzpdnVdIDTSYLAoGBAMWq\njN6+yRFIB5zFtHepMSCOGiLhW+v9Jt5ZnGhERxHvT3lb4yLenNsD8GthqpXO2fnW\nV1fC2KIuJJtl36QS1ihkhgxIYdf4Ph3B1uG1zuBGyQs/PR9+Bh9sCe9nvyQLw3k+\nEMmy0jpGVaRSXrCydueUMlmlRHhwWzx2Z7uMKPJ9AoGAJ/jwNPX/2ITqhqXaVkFb\n5O9hvznmCM3wwiaOM/fsOwycxvVIyen4HDnZ23wY+JdfuqCoomZYbIhPAJ8KCTyn\nbdzrZny3GUy/HbsYszEaNtA9ioxZ8j8vXubQHeZcn6WM8KFRPCZvAvgXwJGbX3uJ\nHGnd2kFRp27V6hkEKrbsG64=\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-s7pql@fir-spring-ecoomerce.iam.gserviceaccount.com",
+  "client_id": "101624856585580719364",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-s7pql%40fir-spring-ecoomerce.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
