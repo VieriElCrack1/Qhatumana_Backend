@@ -11,4 +11,5 @@ public class ResponseAPI<T> {
     private int httpStatus;
     private T data;
     private String errorCode;
+    private String messageDescription;
 }

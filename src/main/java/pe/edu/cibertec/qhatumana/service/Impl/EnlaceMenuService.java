@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import pe.edu.cibertec.qhatumana.model.bd.EnlaceMenu;
 import pe.edu.cibertec.qhatumana.repository.EnlaceMenuRepository;
 import pe.edu.cibertec.qhatumana.service.interfaces.IEnlaceMenuService;
+import pe.edu.cibertec.qhatumana.util.exception.handler.ResourceNotFoundException;
 
 import java.util.List;
 
@@ -20,12 +21,7 @@ public class EnlaceMenuService implements IEnlaceMenuService {
 
     @Override
     public EnlaceMenu buscarEnlaceMenu(int id) {
-        return enlaceMenuRepository.findById(id).orElse(null);
-    }
-
-    @Override
-    public int obtenerIdEnlaceMenu() {
-        return enlaceMenuRepository.obtenerIdEnlaceMenu();
+        return enlaceMenuRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No se encontraron menus"));
     }
 
     @Override

@@ -45,11 +45,6 @@ public class UsuarioService implements IUsuarioService, UserDetailsService {
     }
 
     @Override
-    public int obtenerId() {
-        return usuarioRepository.obtenerId();
-    }
-
-    @Override
     public Usuario iniciarSesion(String username) {
         return usuarioRepository.iniciarSesion(username);
     }
@@ -59,9 +54,9 @@ public class UsuarioService implements IUsuarioService, UserDetailsService {
         try {
             Usuario bean = usuarioRepository.iniciarSesion(username);
             if (bean == null) {
-                throw new UsernameNotFoundException("Usuario no encontrado");
+                throw new UsernameNotFoundException("Email no encontrado");
             }
-            if(bean.getEstado() == false) {
+            if(!bean.getEstado()) {
                 throw new UsernameNotFoundException("El Usuario Esta Deshabilitado");
             }
             Set<GrantedAuthority> authorities = new HashSet<>();
@@ -69,7 +64,7 @@ public class UsuarioService implements IUsuarioService, UserDetailsService {
             return new User(username, bean.getPassword(), authorities);
         } catch (Exception e) {
             System.out.println("Error en : " + e.getMessage());
-            throw new UsernameNotFoundException("Error al cargar el usuario", e);
+            throw new UsernameNotFoundException(e.getMessage());
         }
     }
 
@@ -126,7 +121,7 @@ public class UsuarioService implements IUsuarioService, UserDetailsService {
 
             authResponse = new AuthResponse(username, "Sesión Iniciada Exitosamente", accessToken, true, refreshToken);
         }catch (Exception e) {
-            System.out.println("Error en loginUser : " + e.getMessage());
+            throw new RuntimeException(e.getMessage());
         }
         return authResponse;
     }
@@ -135,11 +130,15 @@ public class UsuarioService implements IUsuarioService, UserDetailsService {
         UserDetails userDetails = loadUserByUsername(username);
 
         if (userDetails == null) {
-            throw new BadCredentialsException(String.format("Invalid username or password"));
+            throw new BadCredentialsException(String.format("Usuario y/o password invalido"));
+        }
+
+        if(!username.equals(userDetails.getUsername())) {
+            throw new BadCredentialsException("Email Incorrecto");
         }
 
         if (!passwordEncoder.matches(password, userDetails.getPassword())) {
-            throw new BadCredentialsException("Incorrect Password");
+            throw new BadCredentialsException("Password Incorrecto");
         }
 
         return new UsernamePasswordAuthenticationToken(username, password, userDetails.getAuthorities());

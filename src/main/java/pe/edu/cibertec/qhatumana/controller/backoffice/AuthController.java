@@ -2,14 +2,12 @@ package pe.edu.cibertec.qhatumana.controller.backoffice;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.cibertec.qhatumana.model.bd.EnlaceMenu;
 import pe.edu.cibertec.qhatumana.model.bd.Usuario;
@@ -36,39 +34,47 @@ public class AuthController {
     @GetMapping("/dashboard")
     public ResponseEntity<Map<String, Object>> menu(Authentication auth) {
         Map<String, Object> response = new HashMap<>();
-        if (auth != null) {
-            String username = auth.getName();
-            Usuario u = usuarioService.iniciarSesion(username);
+        try {
+            if (auth != null) {
+                String username = auth.getName();
+                Usuario u = usuarioService.iniciarSesion(username);
 
-            List<EnlaceMenu> lista = enlaceMenuService.traerEnlaceUsuario(u.getRol().getIdrol());
+                List<EnlaceMenu> lista = enlaceMenuService.traerEnlaceUsuario(u.getRol().getIdrol());
 
-            Map<Integer, Map<String, Object>> menuMap = new HashMap<>();
+                Map<Integer, Map<String, Object>> menuMap = new HashMap<>();
 
-            for (EnlaceMenu enlaceMenu : lista) {
-                if (enlaceMenu.getPadreid() == null) {
-                    Map<String, Object> menuItem = new HashMap<>();
-                    menuItem.put("padre", enlaceMenu);
-                    menuItem.put("submenus", new ArrayList<EnlaceMenu>());
-                    menuMap.put(enlaceMenu.getIdenlace(), menuItem);
-                }
-            }
-
-            for (EnlaceMenu enlaceMenu : lista) {
-                if (enlaceMenu.getPadreid() != null) {
-                    Map<String, Object> parent = menuMap.get(enlaceMenu.getPadreid().getIdenlace());
-                    if (parent != null) {
-                        List<EnlaceMenu> submenus = (List<EnlaceMenu>) parent.get("submenus");
-                        submenus.add(enlaceMenu);
+                for (EnlaceMenu enlaceMenu : lista) {
+                    if (enlaceMenu.getPadreid() == null) {
+                        Map<String, Object> menuItem = new HashMap<>();
+                        menuItem.put("padre", enlaceMenu);
+                        menuItem.put("submenus", new ArrayList<EnlaceMenu>());
+                        menuMap.put(enlaceMenu.getIdenlace(), menuItem);
                     }
                 }
+
+                for (EnlaceMenu enlaceMenu : lista) {
+                    if (enlaceMenu.getPadreid() != null) {
+                        Map<String, Object> parent = menuMap.get(enlaceMenu.getPadreid().getIdenlace());
+                        if (parent != null) {
+                            List<EnlaceMenu> submenus = (List<EnlaceMenu>) parent.get("submenus");
+                            submenus.add(enlaceMenu);
+                        }
+                    }
+                }
+
+                response.put("ENLACES", menuMap);
+                response.put("USUARIO", u);
+
+                return ResponseEntity.status(HttpStatus.OK).body(response);
+            }else {
+                response.put("error", "Token no inválido");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
             }
-
-            response.put("ENLACES", menuMap);
-            response.put("USUARIO", u);
-
-            return ResponseEntity.ok(response);
+        }catch (Exception e) {
+            response.put("message", "Error al Ingresar el menu");
+            response.put("descrip", e.getMessage());
         }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
     }
 
     @PostMapping("/login")
@@ -85,9 +91,16 @@ public class AuthController {
             );
             return new ResponseEntity<>(authResponse, HttpStatus.OK);
         }catch (Exception e) {
+            AuthResponse authResponse = new AuthResponse(
+                    null,
+                    e.getMessage(),
+                    null,
+                    false,
+                    null
+            );
             System.out.println("Error en loguearse : " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(authResponse);
         }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
     @PostMapping("/register")
@@ -105,9 +118,16 @@ public class AuthController {
             );
             return new ResponseEntity<>(authResponse, HttpStatus.OK);
         }catch (Exception e) {
+            AuthResponse authResponse = new AuthResponse(
+                    null,
+                    e.getMessage(),
+                    null,
+                    false,
+                    null
+            );
             System.out.println("Error en loguearse : " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(authResponse);
         }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
     @PostMapping("/refresh")
@@ -128,20 +148,28 @@ public class AuthController {
             AuthResponse authResponse = new AuthResponse(username, "Tokens refreshed", newAccessToken,true, newRefreshToken);
 
             return ResponseEntity.ok(authResponse);
-        } catch (Exception e) {
+        }catch (BadCredentialsException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new AuthResponse(null, e.getMessage(), null, false, null));
+        }  catch (Exception e) {
+            AuthResponse authResponse = new AuthResponse(
+                    null,
+                    e.getMessage(),
+                    null,
+                    false,
+                    null);
             System.out.println("Error al refrescar el token: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(authResponse);
         }
     }
 
     /**Cerrar Sesion y borrar las coookies de auth**/
-    @GetMapping("/logout")
+    /*@GetMapping("/logout")
     public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null){
             new SecurityContextLogoutHandler().logout(request, response, auth);
         }
         return ResponseEntity.ok().build();
-    }
+    }*/
 
 }

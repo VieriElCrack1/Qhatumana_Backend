@@ -8,9 +8,6 @@ import pe.edu.cibertec.qhatumana.model.bd.Usuario;
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
 
-    @Query("Select coalesce(MAX(u.idusuario), 0) + 1 From Usuario u")
-    int obtenerId();
-
     @Query("Select u from Usuario u where u.username=?1")
     Usuario iniciarSesion(String username);
 
