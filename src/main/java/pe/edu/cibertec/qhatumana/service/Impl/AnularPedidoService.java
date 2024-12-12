@@ -11,14 +11,14 @@ import pe.edu.cibertec.qhatumana.model.dto.response.api.ResponseAPI;
 import pe.edu.cibertec.qhatumana.repository.EstadoPedidoRepository;
 import pe.edu.cibertec.qhatumana.repository.PedidoRepository;
 import pe.edu.cibertec.qhatumana.repository.ProductoRepository;
-import pe.edu.cibertec.qhatumana.service.interfaces.IAnularPedido;
+import pe.edu.cibertec.qhatumana.service.interfaces.IAnularPedidoService;
 import pe.edu.cibertec.qhatumana.util.exception.handler.ResourceNotFoundException;
 
 import java.util.List;
 
 @RequiredArgsConstructor
 @Service
-public class AnularPedidoService implements IAnularPedido {
+public class AnularPedidoService implements IAnularPedidoService {
 
     private final PedidoRepository pedidoRepository;
     private final EstadoPedidoRepository estadoPedidoRepository;
