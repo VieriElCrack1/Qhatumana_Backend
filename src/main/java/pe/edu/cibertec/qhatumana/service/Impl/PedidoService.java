@@ -32,6 +32,8 @@ public class PedidoService implements IPedidoService {
     private final ClienteRepository clienteRepository;
     private final UsuarioRepository usuarioRepository;
     private final EstadoPedidoRepository estadoPedidoRepository;
+    private final DetallePedidoRepository detallePedidoRepository;
+    private final FacturaRepository facturaRepository;
 
     @Override
     public List<PedidoListResponse> listaPedidos() {
@@ -84,11 +86,13 @@ public class PedidoService implements IPedidoService {
 
                 detalle.setProducto(producto);
                 detalle.setCantidad(detalleRequest.getCantidad());
-                detalle.setPrecio(detalleRequest.getPrecioUnitario());
 
-                calcularDescuento += detalleRequest.getSubtotal();
+                double precioUnitario = producto.getPrecio();
+                detalle.setPrecio(precioUnitario);
 
-                detalle.setSubtotal(detalleRequest.getSubtotal());
+                double subtotal = precioUnitario * detalleRequest.getCantidad(); // Calculamos el subtotal
+                detalle.setSubtotal(subtotal);
+                calcularDescuento += subtotal;
                 detallePedidos.add(detalle);
             }
 
@@ -134,6 +138,7 @@ public class PedidoService implements IPedidoService {
         Pedido update;
         try{
             Pedido pedido = pedidoRepository.findById(request.getIdpedido()).orElseThrow(() -> new ResourceNotFoundException("No se encontro el pedido : " + request.getIdpedido()));
+
             if(pedido.getEstadoPedido().getNomestado().equalsIgnoreCase("Entregado")) {
                 return ResponseAPI.<PedidoResponse>builder()
                         .message("El pedido ya esta entregado, no se puede actualizar")
@@ -142,6 +147,16 @@ public class PedidoService implements IPedidoService {
                         .httpStatus(HttpStatus.OK.value())
                         .build();
             }
+
+            if(pedido.getEstadoPedido().getNomestado().equalsIgnoreCase("Anulado")) {
+                return ResponseAPI.<PedidoResponse>builder()
+                        .message("El pedido esta anulado, no se puede actualizar")
+                        .data(convertirPedidoResponse(pedido))
+                        .status("EXITO")
+                        .httpStatus(HttpStatus.OK.value())
+                        .build();
+            }
+
             Cliente cliente = clienteRepository.findById(request.getIdcliente()).orElseThrow(() -> new ResourceNotFoundException("Cliente no encontrado"));
             pedido.setCliente(cliente);
 
@@ -159,7 +174,16 @@ public class PedidoService implements IPedidoService {
             double formatearDescuento = request.getDescuento() / 100;
 
             for (DetallePedidoUpdateRequest detalleRequest : request.getDetalles()) {
-                DetallePedido detalle = new DetallePedido();
+                if(detalleRequest.getIddetallepedido() == null || detalleRequest.getIddetallepedido() == 0) {
+                    return ResponseAPI.<PedidoResponse>builder()
+                            .message("El valor idpedido es requerido")
+                            .status("ERROR")
+                            .httpStatus(HttpStatus.BAD_REQUEST.value())
+                            .errorCode(HttpStatus.BAD_REQUEST.name())
+                            .build();
+                }
+
+                DetallePedido detalle = detallePedidoRepository.findById(detalleRequest.getIddetallepedido()).orElseThrow(() -> new ResourceNotFoundException("No se encontro ningún detalle de pedido registado"));
                 detalle.setPedido(pedido);
 
                 Producto producto = productoRepository.findById(detalleRequest.getIdproducto()).orElseThrow(() -> new RuntimeException("No se encontró el producto"));
@@ -178,11 +202,13 @@ public class PedidoService implements IPedidoService {
 
                 detalle.setProducto(producto);
                 detalle.setCantidad(detalleRequest.getCantidad());
-                detalle.setPrecio(detalleRequest.getPrecioUnitario());
 
-                calcularDescuento += detalleRequest.getSubtotal();
+                double precioUnitario = producto.getPrecio();
+                detalle.setPrecio(precioUnitario);
 
-                detalle.setSubtotal(detalleRequest.getSubtotal());
+                double subtotal = precioUnitario * detalleRequest.getCantidad(); // Calculamos el subtotal
+                detalle.setSubtotal(subtotal);
+                calcularDescuento += subtotal;
                 detallePedidos.add(detalle);
             }
 
@@ -213,7 +239,7 @@ public class PedidoService implements IPedidoService {
                     .build();
         }
         return ResponseAPI.<PedidoResponse>builder()
-                .message("Pedido registrado exitosamente")
+                .message("Pedido modificado exitosamente")
                 .data(convertirPedidoResponse(update))
                 .status("EXITO")
                 .httpStatus(HttpStatus.OK.value())

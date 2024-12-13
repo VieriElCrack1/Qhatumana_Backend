@@ -18,7 +18,6 @@ public class Factura {
     private String numfactura;
     private String urlfactura;
     private String nomfactura;
-    @Temporal(TemporalType.DATE)
     private LocalDate fechaemision;
     private Double montototal;
     private Boolean estadofactura;

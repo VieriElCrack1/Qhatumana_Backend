@@ -6,5 +6,6 @@ import lombok.Data;
 @Data
 @Builder
 public class FacturaUpdatePedidoRequest {
-    private Boolean estadofactura;
+    private Integer idfactura;
+    private Integer estadofactura;
 }

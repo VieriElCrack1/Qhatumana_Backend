@@ -8,6 +8,4 @@ import lombok.Data;
 public class DetallePedidoCreateRequest {
     private Integer idproducto;
     private Integer cantidad;
-    private Double precioUnitario;
-    private Double subtotal;
 }

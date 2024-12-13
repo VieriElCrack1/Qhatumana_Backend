@@ -36,7 +36,7 @@ where pe.idPedido = $P{idpedido}]]>
 		<property name="com.jaspersoft.studio.field.label" value="direccionpedido"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="pedido"/>
 	</field>
-	<field name="fechaemision" class="java.sql.Date">
+	<field name="fechaemision" class="java.util.Date">
 		<property name="com.jaspersoft.studio.field.name" value="fechaEmision"/>
 		<property name="com.jaspersoft.studio.field.label" value="fechaemision"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="factura"/>
@@ -71,22 +71,22 @@ where pe.idPedido = $P{idpedido}]]>
 		<property name="com.jaspersoft.studio.field.label" value="cantidad"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="pedidodetalle"/>
 	</field>
-	<field name="precio" class="java.math.BigDecimal">
+	<field name="precio" class="java.lang.Double">
 		<property name="com.jaspersoft.studio.field.name" value="precio"/>
 		<property name="com.jaspersoft.studio.field.label" value="precio"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="pedidodetalle"/>
 	</field>
-	<field name="subtotal" class="java.math.BigDecimal">
+	<field name="subtotal" class="java.lang.Double">
 		<property name="com.jaspersoft.studio.field.name" value="subTotal"/>
 		<property name="com.jaspersoft.studio.field.label" value="subtotal"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="pedidodetalle"/>
 	</field>
-	<field name="montotal" class="java.math.BigDecimal">
+	<field name="montotal" class="java.lang.Double">
 		<property name="com.jaspersoft.studio.field.name" value="montoTotal"/>
 		<property name="com.jaspersoft.studio.field.label" value="montotal"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="pedido"/>
 	</field>
-	<field name="descuento" class="java.math.BigDecimal">
+	<field name="descuento" class="java.lang.Double">
 		<property name="com.jaspersoft.studio.field.name" value="descuento"/>
 		<property name="com.jaspersoft.studio.field.label" value="descuento"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="pedido"/>
@@ -105,17 +105,17 @@ where pe.idPedido = $P{idpedido}]]>
 		<property name="com.jaspersoft.studio.field.label" value="nompago"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="metodopago"/>
 	</field>
-	<variable name="subtotaligv" class="java.math.BigDecimal" calculation="Sum">
+	<variable name="subtotaligv" class="java.lang.Double" calculation="Sum">
 		<variableExpression><![CDATA[$F{subtotal}]]></variableExpression>
 	</variable>
 	<variable name="descuentoFormato" class="java.lang.String" incrementType="Report">
-		<variableExpression><![CDATA[$F{descuento}.multiply(new java.math.BigDecimal(100)).setScale(0, java.math.RoundingMode.HALF_UP).toString() + " %"]]></variableExpression>
+		<variableExpression><![CDATA[String.valueOf(Math.round($F{descuento} * 100)) + " %"]]></variableExpression>
 	</variable>
-	<variable name="calcularDescuentoSubTotal" class="java.math.BigDecimal">
-		<variableExpression><![CDATA[$F{subtotal}.multiply($F{descuento}).setScale(2, java.math.RoundingMode.HALF_UP)]]></variableExpression>
+	<variable name="calcularDescuentoSubTotal" class="java.lang.Double">
+		<variableExpression><![CDATA[Math.round($F{subtotal} * $F{descuento} * 100.0) / 100.0]]></variableExpression>
 	</variable>
-	<variable name="igvcalculo" class="java.math.BigDecimal">
-		<variableExpression><![CDATA[$V{subtotaligv}.subtract($V{calcularDescuentoSubTotal}).multiply(new java.math.BigDecimal("0.18")).setScale(2, java.math.RoundingMode.HALF_UP)]]></variableExpression>
+	<variable name="igvcalculo" class="java.lang.Double">
+		<variableExpression><![CDATA[Math.round(($V{subtotaligv} - $V{calcularDescuentoSubTotal}) * 0.18 * 100.0) / 100.0]]></variableExpression>
 	</variable>
 	<background>
 		<band splitType="Stretch"/>
@@ -127,21 +127,21 @@ where pe.idPedido = $P{idpedido}]]>
 				<imageExpression><![CDATA["logo.jpg"]]></imageExpression>
 			</image>
 			<staticText>
-				<reportElement x="180" y="1" width="375" height="15" uuid="9dfdab09-5d2c-4758-97da-69d6d2b301dc">
+				<reportElement x="170" y="1" width="385" height="15" uuid="9dfdab09-5d2c-4758-97da-69d6d2b301dc">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Right">
-					<font fontName="Roboto" size="12" isItalic="true"/>
+					<font fontName="Arial" size="12" isItalic="true"/>
 				</textElement>
 				<text><![CDATA[Qhatumana market. Pisac, Callao 07031, San Martín de Porres, Perú
 ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="440" y="19" width="115" height="15" uuid="74145922-37ea-4775-ac15-cd6aaf1a3770">
+				<reportElement x="407" y="19" width="148" height="15" uuid="74145922-37ea-4775-ac15-cd6aaf1a3770">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Right">
-					<font fontName="Roboto" size="12" isItalic="true"/>
+					<font fontName="Arial" size="12" isItalic="true"/>
 				</textElement>
 				<text><![CDATA[Ruc: 10465150462]]></text>
 			</staticText>
@@ -150,7 +150,7 @@ where pe.idPedido = $P{idpedido}]]>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Right">
-					<font fontName="Roboto" size="12" isBold="false" isItalic="true"/>
+					<font fontName="Arial" size="12" isBold="false" isItalic="true"/>
 				</textElement>
 				<text><![CDATA[Email: qhatumana@gmail.com]]></text>
 			</staticText>
@@ -159,7 +159,7 @@ where pe.idPedido = $P{idpedido}]]>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Right">
-					<font fontName="Roboto" size="12" isItalic="true"/>
+					<font fontName="Arial" size="12" isItalic="true"/>
 				</textElement>
 				<text><![CDATA[Telefono: 982 928 912]]></text>
 			</staticText>
@@ -178,39 +178,45 @@ where pe.idPedido = $P{idpedido}]]>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<textElement>
-					<font fontName="Roboto" size="11" isBold="true" isItalic="false"/>
+					<font fontName="Arial" size="11" isBold="true" isItalic="false"/>
 				</textElement>
 				<text><![CDATA[Emitido por:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="-1" y="25" width="44" height="13" uuid="31ebcf7d-26ea-46fe-8502-8eb5f7de7a26">
+				<reportElement x="-1" y="25" width="46" height="13" uuid="31ebcf7d-26ea-46fe-8502-8eb5f7de7a26">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<textElement>
-					<font fontName="Roboto" size="11" isBold="true"/>
+					<font fontName="Arial" size="11" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Nombre:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="43" y="25" width="156" height="13" uuid="8c7e1ecf-b4a5-4f39-a7b5-c5858b9996a1">
+				<reportElement x="45" y="25" width="156" height="13" uuid="8c7e1ecf-b4a5-4f39-a7b5-c5858b9996a1">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{usuario}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="0" y="40" width="31" height="13" uuid="856d4dd0-5294-416c-a516-d928fe3cee40">
+				<reportElement x="0" y="40" width="34" height="13" uuid="856d4dd0-5294-416c-a516-d928fe3cee40">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<textElement>
-					<font fontName="Roboto" size="11" isBold="true"/>
+					<font fontName="Arial" size="11" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Email:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="32" y="40" width="166" height="13" uuid="45c3f679-2069-408d-b4af-9b1e30593b6b">
+				<reportElement x="35" y="40" width="166" height="13" uuid="45c3f679-2069-408d-b4af-9b1e30593b6b">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{emailusuario}]]></textFieldExpression>
 			</textField>
 			<staticText>
@@ -218,17 +224,17 @@ where pe.idPedido = $P{idpedido}]]>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<textElement>
-					<font fontName="Roboto" size="11" isBold="true" isItalic="false"/>
+					<font fontName="Arial" size="11" isBold="true" isItalic="false"/>
 				</textElement>
 				<text><![CDATA[Factura a:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="212" y="25" width="45" height="13" uuid="ca9961c5-4566-4184-ae00-857236b9d7e3">
+				<reportElement x="211" y="25" width="46" height="13" uuid="ca9961c5-4566-4184-ae00-857236b9d7e3">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<textElement>
-					<font fontName="Roboto" size="11" isBold="true" isItalic="false"/>
+					<font fontName="Arial" size="11" isBold="true" isItalic="false"/>
 				</textElement>
 				<text><![CDATA[Nombre:]]></text>
 			</staticText>
@@ -236,15 +242,18 @@ where pe.idPedido = $P{idpedido}]]>
 				<reportElement x="257" y="25" width="150" height="13" uuid="c4ccce9d-67c8-4552-b385-6d34586d44ab">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{cliente}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="212" y="41" width="33" height="13" uuid="5d222ea6-2b9f-4a9b-a685-b977b982f639">
+				<reportElement x="211" y="41" width="34" height="13" uuid="5d222ea6-2b9f-4a9b-a685-b977b982f639">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<textElement>
-					<font fontName="Roboto" size="11" isBold="true" isItalic="false"/>
+					<font fontName="Arial" size="11" isBold="true" isItalic="false"/>
 				</textElement>
 				<text><![CDATA[Email:]]></text>
 			</staticText>
@@ -252,15 +261,18 @@ where pe.idPedido = $P{idpedido}]]>
 				<reportElement x="245" y="41" width="155" height="13" uuid="fd08f203-651c-41f9-8473-85ea4b47f79e">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{emailcliente}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="212" y="57" width="52" height="13" uuid="051f59c8-b607-484f-96ea-533c03896e36">
+				<reportElement x="210" y="57" width="54" height="13" uuid="051f59c8-b607-484f-96ea-533c03896e36">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<textElement>
-					<font fontName="Roboto" size="11" isBold="true" isItalic="false"/>
+					<font fontName="Arial" size="11" isBold="true" isItalic="false"/>
 				</textElement>
 				<text><![CDATA[Dirección:]]></text>
 			</staticText>
@@ -268,6 +280,9 @@ where pe.idPedido = $P{idpedido}]]>
 				<reportElement x="264" y="57" width="136" height="13" uuid="8d7515bd-67ed-4c6b-8d4e-43a38ed87c7c">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{direccionpedido}.toLowerCase()]]></textFieldExpression>
 			</textField>
 			<staticText>
@@ -275,55 +290,65 @@ where pe.idPedido = $P{idpedido}]]>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<textElement>
-					<font fontName="Roboto" size="11" isBold="true" isItalic="false"/>
+					<font fontName="Arial" size="11" isBold="true" isItalic="false"/>
 				</textElement>
 				<text><![CDATA[Factura:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="418" y="25" width="78" height="13" uuid="9f718780-4de7-4a07-a7dc-47505b20a53d">
+				<reportElement x="417" y="25" width="84" height="13" uuid="9f718780-4de7-4a07-a7dc-47505b20a53d">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<textElement>
-					<font fontName="Roboto" size="11" isBold="true" isItalic="false"/>
+					<font fontName="Arial" size="11" isBold="true" isItalic="false"/>
 				</textElement>
 				<text><![CDATA[Fecha Emisión:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="496" y="25" width="78" height="13" uuid="eb915444-41b3-4b6d-9297-7d29cea2b63a">
+				<reportElement x="501" y="25" width="78" height="13" uuid="eb915444-41b3-4b6d-9297-7d29cea2b63a">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{fechaemision}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="418" y="41" width="43" height="13" uuid="14bcce37-212d-404c-85a6-1710de1e3cf1">
+				<reportElement x="417" y="41" width="46" height="13" uuid="14bcce37-212d-404c-85a6-1710de1e3cf1">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<textElement>
-					<font fontName="Roboto" size="11" isBold="true" isItalic="false"/>
+					<font fontName="Arial" size="11" isBold="true" isItalic="false"/>
 				</textElement>
 				<text><![CDATA[Numero:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="462" y="41" width="98" height="13" uuid="83f24255-bb2f-4d02-96e2-95360c148539">
+				<reportElement x="463" y="41" width="98" height="13" uuid="83f24255-bb2f-4d02-96e2-95360c148539">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{numfactura}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="418" y="57" width="38" height="13" uuid="0bd259a6-7727-463e-95f8-747d9fc8aa67">
+				<reportElement x="417" y="57" width="41" height="13" uuid="0bd259a6-7727-463e-95f8-747d9fc8aa67">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<textElement>
-					<font fontName="Roboto" size="11" isBold="true" isItalic="false"/>
+					<font fontName="Arial" size="11" isBold="true" isItalic="false"/>
 				</textElement>
 				<text><![CDATA[Estado:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="456" y="57" width="100" height="13" uuid="347c2c4e-8953-450a-b1e5-c453b3891658">
+				<reportElement x="458" y="57" width="100" height="13" uuid="347c2c4e-8953-450a-b1e5-c453b3891658">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{nomestadopedido}]]></textFieldExpression>
 			</textField>
 			<line>
@@ -346,7 +371,7 @@ where pe.idPedido = $P{idpedido}]]>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Roboto" isBold="true"/>
+					<font fontName="Arial" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Producto]]></text>
 			</staticText>
@@ -359,7 +384,7 @@ where pe.idPedido = $P{idpedido}]]>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Roboto" isBold="true"/>
+					<font fontName="Arial" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Descripcion]]></text>
 			</staticText>
@@ -372,7 +397,7 @@ where pe.idPedido = $P{idpedido}]]>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Roboto" isBold="true"/>
+					<font fontName="Arial" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Categoria]]></text>
 			</staticText>
@@ -385,7 +410,7 @@ where pe.idPedido = $P{idpedido}]]>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Roboto" isBold="true"/>
+					<font fontName="Arial" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Cantidad]]></text>
 			</staticText>
@@ -398,7 +423,7 @@ where pe.idPedido = $P{idpedido}]]>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Roboto" isBold="true"/>
+					<font fontName="Arial" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Precio]]></text>
 			</staticText>
@@ -411,7 +436,7 @@ where pe.idPedido = $P{idpedido}]]>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Roboto" isBold="true"/>
+					<font fontName="Arial" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Sub Total]]></text>
 			</staticText>
@@ -433,7 +458,7 @@ where pe.idPedido = $P{idpedido}]]>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Roboto" size="9"/>
+					<font fontName="Arial" size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{nomproducto}.toLowerCase()]]></textFieldExpression>
 			</textField>
@@ -450,7 +475,7 @@ where pe.idPedido = $P{idpedido}]]>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Roboto" size="9"/>
+					<font fontName="Arial" size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{descripproducto}.toLowerCase()]]></textFieldExpression>
 			</textField>
@@ -467,7 +492,7 @@ where pe.idPedido = $P{idpedido}]]>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Roboto" size="9"/>
+					<font fontName="Arial" size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{nomcategoria}.toLowerCase()]]></textFieldExpression>
 			</textField>
@@ -484,7 +509,7 @@ where pe.idPedido = $P{idpedido}]]>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Roboto" size="9"/>
+					<font fontName="Arial" size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{cantidad}]]></textFieldExpression>
 			</textField>
@@ -501,7 +526,7 @@ where pe.idPedido = $P{idpedido}]]>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Roboto" size="9"/>
+					<font fontName="Arial" size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{precio}]]></textFieldExpression>
 			</textField>
@@ -518,7 +543,7 @@ where pe.idPedido = $P{idpedido}]]>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Roboto" size="9"/>
+					<font fontName="Arial" size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{subtotal}]]></textFieldExpression>
 			</textField>
@@ -527,24 +552,24 @@ where pe.idPedido = $P{idpedido}]]>
 	<columnFooter>
 		<band height="130" splitType="Stretch">
 			<line>
-				<reportElement x="-8" y="11" width="141" height="1" uuid="347c8227-b41a-4efa-861e-8a07083d505d"/>
+				<reportElement x="-6" y="11" width="141" height="1" uuid="347c8227-b41a-4efa-861e-8a07083d505d"/>
 				<graphicElement>
 					<pen lineColor="#B3B5B5"/>
 				</graphicElement>
 			</line>
 			<staticText>
-				<reportElement x="-5" y="16" width="138" height="16" uuid="2d271dd8-f9e5-44ab-a539-bbdf4330118c">
+				<reportElement x="-5" y="16" width="155" height="16" uuid="2d271dd8-f9e5-44ab-a539-bbdf4330118c">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<textElement>
-					<font fontName="Roboto Black" size="12" isItalic="true"/>
+					<font fontName="Arial" size="12" isBold="true" isItalic="true"/>
 				</textElement>
 				<text><![CDATA[Terminos y Condiciones]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="-5" y="40" width="566" height="80" uuid="b1460c44-b254-4efa-a70a-f682f868ab54"/>
 				<textElement textAlignment="Justified" verticalAlignment="Top">
-					<font fontName="Roboto" size="11" isItalic="true"/>
+					<font fontName="Arial" size="11" isItalic="true"/>
 				</textElement>
 				<text><![CDATA[En Qhatumana Minimarket, nos comprometemos a brindar productos de calidad y un excelente servicio al cliente. Todas las compras están sujetas a disponibilidad de stock y deben conservarse los comprobantes como garantía. No se aceptan devoluciones de productos frescos, si hay defectos, verifica al momento de la compra. Los métodos de pago aceptados incluyen efectivo, tarjetas de crédito/débito, Plin y Yape Los datos personales proporcionados se manejarán con estricta confidencialidad y serán utilizados exclusivamente para mejorar su experiencia de compra. Al realizar una compra, usted acepta los términos aquí establecidos.]]></text>
 			</staticText>
@@ -564,7 +589,7 @@ where pe.idPedido = $P{idpedido}]]>
 			<staticText>
 				<reportElement x="348" y="26" width="70" height="16" uuid="413cb737-c69e-4bde-b03f-f3faa4b38a03"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="Roboto&#xD;&#xA;"/>
+					<font fontName="Arial"/>
 				</textElement>
 				<text><![CDATA[Total sin IGV]]></text>
 			</staticText>
@@ -572,26 +597,33 @@ where pe.idPedido = $P{idpedido}]]>
 				<reportElement x="308" y="47" width="110" height="16" uuid="754b475d-24c4-4cc2-9399-625dede259c4">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
-				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Arial"/>
+				</textElement>
 				<textFieldExpression><![CDATA["Descuento " + $V{descuentoFormato}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="493" y="26" width="85" height="16" uuid="58ad9017-8009-4b37-aaab-d0fb2e302d5e">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
-				<textElement textAlignment="Left" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$V{subtotaligv}]]></textFieldExpression>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[String.format("%.2f", $V{subtotaligv})]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="493" y="47" width="85" height="16" uuid="be3035a7-60e9-4a60-a545-7a203b0a64b6">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
-				<textFieldExpression><![CDATA["-" +$V{calcularDescuentoSubTotal}.toString()]]></textFieldExpression>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA["-" +String.format("%.2f",$V{calcularDescuentoSubTotal})]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="348" y="69" width="70" height="16" uuid="4ec71267-0610-4632-a83f-624d7507009e"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="Roboto&#xD;&#xA;"/>
+					<font fontName="Arial"/>
 				</textElement>
 				<text><![CDATA[IGV 18%]]></text>
 			</staticText>
@@ -599,12 +631,15 @@ where pe.idPedido = $P{idpedido}]]>
 				<reportElement x="494" y="69" width="100" height="16" uuid="7e8ece15-0fe3-45de-a5a5-c02192f3204d">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
-				<textFieldExpression><![CDATA[$V{igvcalculo}]]></textFieldExpression>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[String.format("%.2f", $V{igvcalculo})]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="348" y="91" width="70" height="16" uuid="43573edb-e23b-49e6-a320-2e8f5b3c0c9f"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="Roboto&#xD;&#xA;"/>
+					<font fontName="Arial" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Monto Total]]></text>
 			</staticText>
@@ -612,6 +647,9 @@ where pe.idPedido = $P{idpedido}]]>
 				<reportElement x="493" y="91" width="100" height="16" uuid="12f47615-adbe-4db4-8908-91dc9ae77de8">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{montotal}]]></textFieldExpression>
 			</textField>
 		</band>

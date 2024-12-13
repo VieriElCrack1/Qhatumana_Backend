@@ -15,4 +15,5 @@ public class FacturaPedidoResponse {
     private LocalDate fechaemision;
     private Double montototal;
     private String estadofactura;
+    private String urlfactura;
 }
