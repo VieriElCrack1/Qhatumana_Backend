@@ -9,10 +9,12 @@ import java.io.InputStream;
 
 //@Configuration //se habilitara cuando generemos el pdf u otra cosa
 public class JasperReportConfig {
+
+    //@Bean
     public JasperReport compileReport() throws JRException {
-        InputStream employeeReportStream = getClass().getResourceAsStream("/factura.jrxml");
+        InputStream employeeReportStream = getClass().getResourceAsStream("/facturapedido.jrxml");
         JasperReport jasperReport = JasperCompileManager.compileReport(employeeReportStream);
-        JRSaver.saveObject(jasperReport, "src/main/resources/factura.jasper");
+        JRSaver.saveObject(jasperReport, "src/main/resources/facturapedido.jasper");
         return jasperReport;
     }
 }

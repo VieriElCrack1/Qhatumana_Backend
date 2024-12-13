@@ -9,6 +9,4 @@ public class DetallePedidoUpdateRequest {
     private Integer iddetallepedido;
     private Integer idproducto;
     private Integer cantidad;
-    private Double precioUnitario;
-    private Double subtotal;
 }
