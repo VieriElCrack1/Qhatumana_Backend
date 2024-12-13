@@ -16,8 +16,10 @@ public class Factura {
     @JoinColumn(name = "idpedido", nullable = false)
     private Pedido pedido;
     private String numfactura;
+    private String urlfactura;
+    private String nomfactura;
     @Temporal(TemporalType.DATE)
-    private LocalDate fechareg;
+    private LocalDate fechaemision;
     private Double montototal;
     private Boolean estadofactura;
 }

@@ -54,14 +54,16 @@ public class PedidoService implements IPedidoService {
 
             pedido.setFechapedido(LocalDate.now());
             pedido.setIgv(0.18);
-            pedido.setDescuento(request.getDescuento());
-            pedido.setMontototal(request.getMontototal());
+            pedido.setDescuento(request.getDescuento() / 100);
+
             pedido.setDireccion(request.getDireccion());
 
             EstadoPedido estadoPedido = estadoPedidoRepository.findById(request.getIdestado()).orElseThrow(() -> new ResourceNotFoundException("No se encontró ningun estado pedido"));
             pedido.setEstadoPedido(estadoPedido);
 
             List<DetallePedido> detallePedidos = new ArrayList<>();
+            double calcularDescuento = 0.0;
+            double formatearDescuento = request.getDescuento() / 100;
             for (DetallePedidoCreateRequest detalleRequest : request.getDetalles()) {
                 DetallePedido detalle = new DetallePedido();
                 detalle.setPedido(pedido);
@@ -83,9 +85,18 @@ public class PedidoService implements IPedidoService {
                 detalle.setProducto(producto);
                 detalle.setCantidad(detalleRequest.getCantidad());
                 detalle.setPrecio(detalleRequest.getPrecioUnitario());
+
+                calcularDescuento += detalleRequest.getSubtotal();
+
                 detalle.setSubtotal(detalleRequest.getSubtotal());
                 detallePedidos.add(detalle);
             }
+
+            double montoDescuento = calcularDescuento * formatearDescuento;
+            double igvMontoDescuento = montoDescuento * 0.18;
+            double montoTotal = (calcularDescuento - montoDescuento) + igvMontoDescuento;
+
+            pedido.setMontototal(montoTotal);
 
             pedido.setDetallePedidoList(detallePedidos);
 
@@ -137,14 +148,16 @@ public class PedidoService implements IPedidoService {
             Usuario usuario = usuarioRepository.findById(request.getIdusuario()).orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado"));
             pedido.setUsuario(usuario);
 
-            pedido.setDescuento(request.getDescuento());
-            pedido.setMontototal(request.getMontototal());
+            pedido.setDescuento(request.getDescuento() / 100);
             pedido.setDireccion(request.getDireccion());
 
             EstadoPedido estadoPedido = estadoPedidoRepository.findById(request.getIdestado()).orElseThrow(() -> new ResourceNotFoundException("No se encontró ningun estado pedido"));
             pedido.setEstadoPedido(estadoPedido);
 
             List<DetallePedido> detallePedidos = new ArrayList<>();
+            double calcularDescuento = 0.0;
+            double formatearDescuento = request.getDescuento() / 100;
+
             for (DetallePedidoUpdateRequest detalleRequest : request.getDetalles()) {
                 DetallePedido detalle = new DetallePedido();
                 detalle.setPedido(pedido);
@@ -166,9 +179,18 @@ public class PedidoService implements IPedidoService {
                 detalle.setProducto(producto);
                 detalle.setCantidad(detalleRequest.getCantidad());
                 detalle.setPrecio(detalleRequest.getPrecioUnitario());
+
+                calcularDescuento += detalleRequest.getSubtotal();
+
                 detalle.setSubtotal(detalleRequest.getSubtotal());
                 detallePedidos.add(detalle);
             }
+
+            double montoDescuento = calcularDescuento * formatearDescuento;
+            double igvMontoDescuento = montoDescuento * 0.18;
+            double montoTotal = (calcularDescuento - montoDescuento) + igvMontoDescuento;
+
+            pedido.setMontototal(montoTotal);
 
             pedido.setDetallePedidoList(detallePedidos);
 

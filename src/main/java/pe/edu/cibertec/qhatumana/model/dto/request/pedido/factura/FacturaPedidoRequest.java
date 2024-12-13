@@ -9,4 +9,6 @@ public class FacturaPedidoRequest {
     private Integer idfactura;
     private Integer idpedido;
     private String numfactura;
+    private String urlfactura;
+    private String nomfactura;
 }
