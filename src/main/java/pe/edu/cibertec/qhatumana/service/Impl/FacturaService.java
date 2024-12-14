@@ -58,7 +58,7 @@ public class FacturaService implements IFacturaService {
             Factura factura = new Factura();
 
             Pedido pedido = pedidoRepository.findById(facturaPedidoRequest.getIdpedido()).orElseThrow(() -> new ResourceNotFoundException("No se encontro ningun pedido"));
-            if (facturaRepository.existsByPedido(pedido)) {
+            if (facturaRepository.existsByPedidoAndEstadofactura(pedido, true)) {
                 throw new IllegalArgumentException("Este pedido ya tiene una factura generada.");
             }
             factura.setPedido(pedido);

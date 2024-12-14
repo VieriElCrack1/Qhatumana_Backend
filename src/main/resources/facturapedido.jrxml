@@ -20,7 +20,7 @@ join categoria c on c.idCategoria=pr.idCategoria
 join usuario u on u.idUsuario=pe.idUsuario
 join pagopedido pago on pago.idPedido=pe.idPedido
 join metodopago metodo on metodo.idMetodoPago=pago.idMetodoPago
-where pe.idPedido = $P{idpedido}]]>
+where pe.idPedido = $P{idpedido} and f.estadoFactura = 1]]>
 	</queryString>
 	<field name="cliente" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.name" value="cliente"/>
