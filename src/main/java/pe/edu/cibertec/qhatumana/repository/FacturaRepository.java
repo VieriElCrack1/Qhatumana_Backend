@@ -28,7 +28,7 @@ public interface FacturaRepository extends JpaRepository<Factura, Integer> {
             " JOIN p.usuario u " +
             " JOIN p.pagoPedidoList pago " +
             " JOIN pago.metodoPago metodo " +
-            " WHERE p.idpedido=:idpedido" +
+            " WHERE p.idpedido=:idpedido AND f.estadofactura = true " +
             " GROUP BY concat(cl.nomcliente,' ',cl.apecliente),cl.email, " +
             " p.direccion,f.fechaemision,f.numfactura,ep.nomestado,pr.nomproducto,pr.descrip,c.nomcategoria, " +
             " pd.cantidad,pd.precio,pd.subtotal, p.montototal,p.descuento,concat(u.nomusuario,' ',u.apeusuario), " +
@@ -38,7 +38,7 @@ public interface FacturaRepository extends JpaRepository<Factura, Integer> {
     @Query("SELECT f.numfactura FROM Factura f ORDER BY f.idfactura DESC LIMIT 1")
     String obtenerUltimaPosicionNumFactura();
 
-    boolean existsByPedido(Pedido pedido);
+    boolean existsByPedidoAndEstadofactura(Pedido pedido, Boolean estadoFactura);
 
     Optional<Factura> findByPedido(Pedido pedido);
 }
