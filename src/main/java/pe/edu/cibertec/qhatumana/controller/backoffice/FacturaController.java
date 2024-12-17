@@ -22,22 +22,12 @@ public class FacturaController {
     private final IFacturaService facturaService;
 
     @GetMapping("/lista")
-    public ResponseEntity<ResponseAPI<List<FacturaPedidoResponse>>> listadoFacturas() {
+    public ResponseEntity<List<FacturaPedidoResponse>> listadoFacturas() {
         List<FacturaPedidoResponse> facturas = facturaService.listaFacturaPedidoResponse();
         if(CollectionUtils.isEmpty(facturas)) {
-            return new ResponseEntity<>(ResponseAPI.<List<FacturaPedidoResponse>>builder()
-                    .message("No se encontro ningún listado de factura")
-                    .httpStatus(HttpStatus.NO_CONTENT.value())
-                    .status("EXITO")
-                    .data(facturas)
-                    .build(), HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(ResponseAPI.<List<FacturaPedidoResponse>>builder()
-                .message("Se encontraron facturas disponibles")
-                .httpStatus(HttpStatus.OK.value())
-                .status("EXITO")
-                .data(facturas)
-                .build(), HttpStatus.OK);
+        return new ResponseEntity<>(facturas, HttpStatus.OK);
     }
 
     @PostMapping("/registrar")

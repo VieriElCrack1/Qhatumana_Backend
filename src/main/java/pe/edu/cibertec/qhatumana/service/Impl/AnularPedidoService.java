@@ -52,6 +52,9 @@ public class AnularPedidoService implements IAnularPedidoService {
                         .build();
             }
 
+            Factura factura = facturaRepository.findByPedido(pedido).orElseThrow(() -> new ResourceNotFoundException("No se encontro ninguna factura asociada al pedido"));
+            PagoPedido pagoPedido = pagoPedidoRepository.findByPedido(pedido).orElseThrow(() -> new ResourceNotFoundException("No se encontro ninguna pago del pedido"));
+
             anulacionPedido.setPedido(pedido);
             anulacionPedido.setMotivoanulacion(request.getMotivoanulacion());
             anulacionPedido.setFechaanulacion(LocalDate.now());
@@ -65,13 +68,11 @@ public class AnularPedidoService implements IAnularPedidoService {
             pedido.setEstadoPedido(estadoAnulado);
             pedidoRepository.save(pedido);
 
-            Factura factura = facturaRepository.findByPedido(pedido).orElseThrow(() -> new ResourceNotFoundException("No se encontro ninguna factura asociada al pedido"));
             if(factura.getEstadofactura()) {
                 factura.setEstadofactura(false);
                 facturaRepository.save(factura);
             }
 
-            PagoPedido pagoPedido = pagoPedidoRepository.findByPedido(pedido).orElseThrow(() -> new ResourceNotFoundException("No se encontro ninguna pago del pedido"));
             if(pagoPedido.getEstado()) {
                 pagoPedido.setEstado(false);
                 pagoPedidoRepository.save(pagoPedido);
@@ -82,8 +83,8 @@ public class AnularPedidoService implements IAnularPedidoService {
             return ResponseAPI.<AnularPedidoResponse>builder()
                     .message("Error al anular el pedido: " + e.getMessage())
                     .status("ERROR")
-                    .httpStatus(HttpStatus.INTERNAL_SERVER_ERROR.value())
-                    .errorCode(HttpStatus.INTERNAL_SERVER_ERROR.name())
+                    .httpStatus(HttpStatus.BAD_REQUEST.value())
+                    .errorCode(HttpStatus.BAD_REQUEST.name())
                     .messageDescription(e.getMessage())
                     .build();
         }

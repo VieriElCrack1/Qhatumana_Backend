@@ -3,7 +3,6 @@ package pe.edu.cibertec.qhatumana.controller.backoffice;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,7 +19,7 @@ public class ProductoController {
 
     private final IProductoService productoService;
 
-    @PreAuthorize("hasRole('Cliente')")
+    //@PreAuthorize("hasRole('Cliente')")
     @GetMapping("/lista")
     public ResponseEntity<List<ProductoResponse>> listadoProductos() {
         List<ProductoResponse> response = productoService.listaProductoResponses();

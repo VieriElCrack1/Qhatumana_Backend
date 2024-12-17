@@ -13,7 +13,6 @@ public class PedidoAndDetalleUpdateRequest {
     private Integer idcliente;
     private Integer idusuario;
     private Double descuento;
-    private Double montototal;
     private String direccion;
     private Integer idestado;
     private List<DetallePedidoUpdateRequest> detalles;
