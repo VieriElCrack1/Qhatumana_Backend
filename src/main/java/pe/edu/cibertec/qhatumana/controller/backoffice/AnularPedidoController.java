@@ -21,24 +21,12 @@ public class AnularPedidoController {
     private final IAnularPedidoService anularPedidoService;
 
     @GetMapping("/lista")
-    public ResponseEntity<ResponseAPI<List<AnularPedidoResponse>>> listadoPedidoResponse() {
+    public ResponseEntity<List<AnularPedidoResponse>> listadoPedidoResponse() {
         List<AnularPedidoResponse> response = anularPedidoService.listadoAnularPedido();
         if(CollectionUtils.isEmpty(response)) {
-            return new ResponseEntity<>(ResponseAPI.<List<AnularPedidoResponse>>builder()
-                    .data(response)
-                    .message("No se encontro ninguna anulacion de pedido")
-                    .status("EXITO")
-                    .httpStatus(HttpStatus.NO_CONTENT.value())
-                    .errorCode(HttpStatus.NO_CONTENT.name())
-                    .build(), HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(ResponseAPI.<List<AnularPedidoResponse>>builder()
-                .data(response)
-                .message("Se encontraron anulaciones de pedido")
-                .status("EXITO")
-                .httpStatus(HttpStatus.OK.value())
-                .errorCode(HttpStatus.OK.name())
-                .build(), HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping("/registrar")

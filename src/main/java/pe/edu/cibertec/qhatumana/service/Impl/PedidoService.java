@@ -56,7 +56,10 @@ public class PedidoService implements IPedidoService {
 
             pedido.setFechapedido(LocalDate.now());
             pedido.setIgv(0.18);
-            pedido.setDescuento(request.getDescuento() / 100);
+
+            double descuento = request.getDescuento() / 100;
+
+            pedido.setDescuento(descuento);
 
             pedido.setDireccion(request.getDireccion());
 
@@ -139,7 +142,9 @@ public class PedidoService implements IPedidoService {
         try{
             Pedido pedido = pedidoRepository.findById(request.getIdpedido()).orElseThrow(() -> new ResourceNotFoundException("No se encontro el pedido : " + request.getIdpedido()));
 
-            if(pedido.getEstadoPedido().getNomestado().equalsIgnoreCase("Entregado")) {
+            EstadoPedido estadoPedido = estadoPedidoRepository.findById(request.getIdestado()).orElseThrow(() -> new ResourceNotFoundException("No se encontró ningun estado pedido"));
+
+            if(pedido.getEstadoPedido().getNomestado().equalsIgnoreCase("Entregado") || pedido.getEstadoPedido().getIdestado() == 2) {
                 return ResponseAPI.<PedidoResponse>builder()
                         .message("El pedido ya esta entregado, no se puede actualizar")
                         .data(convertirPedidoResponse(pedido))
@@ -148,7 +153,7 @@ public class PedidoService implements IPedidoService {
                         .build();
             }
 
-            if(pedido.getEstadoPedido().getNomestado().equalsIgnoreCase("Anulado")) {
+            if(pedido.getEstadoPedido().getNomestado().equalsIgnoreCase("Anulado") || pedido.getEstadoPedido().getIdestado() == 3) {
                 return ResponseAPI.<PedidoResponse>builder()
                         .message("El pedido esta anulado, no se puede actualizar")
                         .data(convertirPedidoResponse(pedido))
@@ -163,10 +168,12 @@ public class PedidoService implements IPedidoService {
             Usuario usuario = usuarioRepository.findById(request.getIdusuario()).orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado"));
             pedido.setUsuario(usuario);
 
-            pedido.setDescuento(request.getDescuento() / 100);
+            double descuento = request.getDescuento() / 100;
+
+            pedido.setDescuento(descuento);
             pedido.setDireccion(request.getDireccion());
 
-            EstadoPedido estadoPedido = estadoPedidoRepository.findById(request.getIdestado()).orElseThrow(() -> new ResourceNotFoundException("No se encontró ningun estado pedido"));
+
             pedido.setEstadoPedido(estadoPedido);
 
             List<DetallePedido> detallePedidos = new ArrayList<>();

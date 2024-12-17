@@ -21,24 +21,12 @@ public class PagoPedidoController {
     private final IPagoPedidoService pagoPedidoService;
 
     @GetMapping("/lista")
-    public ResponseEntity<ResponseAPI<List<PagoPedidoResponse>>> listadoPagoPedido() {
+    public ResponseEntity<List<PagoPedidoResponse>> listadoPagoPedido() {
         List<PagoPedidoResponse> response = pagoPedidoService.listadoPagoPedido();
         if(CollectionUtils.isEmpty(response)) {
-            return new ResponseEntity<>(ResponseAPI.<List<PagoPedidoResponse>>builder()
-                    .message("No se encontraron listado de pago de pedidos")
-                    .status("EXITO")
-                    .data(response)
-                    .httpStatus(HttpStatus.NO_CONTENT.value())
-                    .errorCode(HttpStatus.NO_CONTENT.name())
-                    .build(), HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(ResponseAPI.<List<PagoPedidoResponse>>builder()
-                .message("Se encontraron listados de pago de pedido")
-                .status("EXITO")
-                .data(response)
-                .httpStatus(HttpStatus.OK.value())
-                .errorCode(HttpStatus.OK.name())
-                .build(), HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping("/registrar")

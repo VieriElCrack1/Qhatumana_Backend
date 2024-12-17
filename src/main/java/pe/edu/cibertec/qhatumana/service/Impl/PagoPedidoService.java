@@ -44,6 +44,10 @@ public class PagoPedidoService implements IPagoPedidoService {
 
             Pedido pedido = pedidoRepository.findById(request.getIdpedido()).orElseThrow(() ->
                     new ResourceNotFoundException("No se encontro el pedido"));
+
+            MetodoPago metodoPago = metodoPagoRepository.findById(request.getIdmetodoPago()).orElseThrow(() ->
+                    new ResourceNotFoundException("No se encontro ningun metodo de pago"));
+
             boolean existePedidoPagado = pagoPedidoRepository.existsByPedidoIdpedidoAndEstadoTrue(pedido.getIdpedido());
 
             if (existePedidoPagado) {
@@ -54,11 +58,10 @@ public class PagoPedidoService implements IPagoPedidoService {
                         .errorCode(HttpStatus.BAD_REQUEST.name())
                         .build();
             }
+
             pagoPedido.setPedido(pedido);
             pagoPedido.setMontopagado(pedido.getMontototal());
 
-            MetodoPago metodoPago = metodoPagoRepository.findById(request.getIdmetodoPago()).orElseThrow(() ->
-                    new ResourceNotFoundException("No se encontro ningun metodo de pago"));
             pagoPedido.setMetodoPago(metodoPago);
 
             pagoPedido.setFechapago(LocalDate.now());

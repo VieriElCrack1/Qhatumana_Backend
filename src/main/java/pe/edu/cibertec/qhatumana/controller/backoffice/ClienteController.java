@@ -24,22 +24,12 @@ public class ClienteController {
     private final IClienteService clienteService;
 
     @GetMapping("/lista")
-    public ResponseAPI<List<ClienteResponse>> listadoCliente() {
+    public ResponseEntity<List<ClienteResponse>> listadoCliente() {
         List<ClienteResponse> listado = clienteService.listadoClientes();
         if (listado.isEmpty()) {
-            return ResponseAPI.<List<ClienteResponse>>builder()
-                    .message("No se encontro ningun cliente")
-                    .status("EXITO")
-                    .httpStatus(HttpStatus.OK.value())
-                    .data(listado)
-                    .build();
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return ResponseAPI.<List<ClienteResponse>>builder()
-                .message("Clientes Encontrados")
-                .status("EXITO")
-                .httpStatus(HttpStatus.OK.value())
-                .data(listado)
-                .build();
+        return new ResponseEntity<>(listado, HttpStatus.OK);
     }
 
     @PostMapping("/registrar")

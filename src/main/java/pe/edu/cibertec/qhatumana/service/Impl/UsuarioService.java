@@ -71,6 +71,9 @@ public class UsuarioService implements IUsuarioService, UserDetailsService {
     public AuthResponse crearteUser(AuthCreateUserRequest createUserRequest) {
         AuthResponse auth;
         try {
+            Rol rol = rolRepository.findById(4)
+                    .orElseThrow(() -> new IllegalArgumentException("Rol no encontrado"));
+
             String username = createUserRequest.username();
             String password = createUserRequest.password();
 
@@ -84,8 +87,6 @@ public class UsuarioService implements IUsuarioService, UserDetailsService {
             user.setDni(createUserRequest.dni());
             user.setFechareg(LocalDate.now());
 
-            Rol rol = rolRepository.findById(4)
-                    .orElseThrow(() -> new IllegalArgumentException("Rol no encontrado"));
             user.setRol(rol);
             user.setEstado(true);
 
@@ -134,7 +135,7 @@ public class UsuarioService implements IUsuarioService, UserDetailsService {
         }
 
         if(!username.equals(userDetails.getUsername())) {
-            throw new BadCredentialsException("Email Incorrecto");
+            throw new BadCredentialsException("Email no encontrado");
         }
 
         if (!passwordEncoder.matches(password, userDetails.getPassword())) {
