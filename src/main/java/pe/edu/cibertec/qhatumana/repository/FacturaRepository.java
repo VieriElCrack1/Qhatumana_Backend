@@ -6,6 +6,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import pe.edu.cibertec.qhatumana.model.bd.Factura;
 import pe.edu.cibertec.qhatumana.model.bd.Pedido;
+import pe.edu.cibertec.qhatumana.model.dto.response.pedido.factura.FacturaConsultaResponse;
 import pe.edu.cibertec.qhatumana.model.dto.response.pedido.factura.FacturaReportListResponse;
 
 import java.util.List;
@@ -41,4 +42,12 @@ public interface FacturaRepository extends JpaRepository<Factura, Integer> {
     boolean existsByPedidoAndEstadofactura(Pedido pedido, Boolean estadoFactura);
 
     Optional<Factura> findByPedido(Pedido pedido);
+
+    @Query("SELECT new pe.edu.cibertec.qhatumana.model.dto.response.pedido.factura.FacturaConsultaResponse(f.idfactura,concat(c.nomcliente,' ',c.apecliente),c.email,f.pedido.direccion,CAST(f.fechaemision AS java.util.Date),f.montototal,pd.metodoPago.nompago,f.urlfactura,f.estadofactura) " +
+            " FROM Factura f" +
+            " JOIN f.pedido.cliente c" +
+            " JOIN f.pedido.pagoPedidoList pd" +
+            " WHERE (LOWER(concat(c.nomcliente, ' ', c.apecliente)) LIKE LOWER(CONCAT('%', :cliente, '%')) OR :cliente IS NULL OR :cliente = '')" +
+            " GROUP BY f.idfactura,c.nomcliente,c.apecliente,c.email,f.pedido.direccion,f.fechaemision,f.montototal,pd.metodoPago.nompago,f.urlfactura,f.estadofactura")
+    List<FacturaConsultaResponse> consultarFacturaXNomcliente(@Param("cliente") String cliente);
 }

@@ -21,6 +21,7 @@ import pe.edu.cibertec.qhatumana.model.dto.request.pedido.factura.FacturaUpdateP
 import pe.edu.cibertec.qhatumana.model.dto.response.api.ResponseAPI;
 import pe.edu.cibertec.qhatumana.model.dto.response.pedido.PedidoResponse;
 import pe.edu.cibertec.qhatumana.model.dto.response.pedido.detalle.DetallePedidoResponse;
+import pe.edu.cibertec.qhatumana.model.dto.response.pedido.factura.FacturaConsultaResponse;
 import pe.edu.cibertec.qhatumana.model.dto.response.pedido.factura.FacturaPedidoResponse;
 import pe.edu.cibertec.qhatumana.model.dto.response.pedido.factura.FacturaReportListResponse;
 import pe.edu.cibertec.qhatumana.repository.FacturaRepository;
@@ -146,11 +147,11 @@ public class FacturaService implements IFacturaService {
         try {
             Factura factura = facturaRepository.findById(request.getIdfactura()).orElseThrow(() -> new ResourceNotFoundException("Factura no encontrada"));
 
-            if (request.getEstadofactura() != 0 && request.getEstadofactura() != 1) {
+            if (request.getEstadofactura() == null) {
                 throw new IllegalArgumentException("Solo se permite cambiar el estado de la factua a facturada(1) o anulada(0)");
             }
 
-            factura.setEstadofactura(request.getEstadofactura() == 0 ? false : true);
+            factura.setEstadofactura(request.getEstadofactura());
 
             Factura facturaSave = facturaRepository.save(factura);
 
@@ -202,6 +203,11 @@ public class FacturaService implements IFacturaService {
                     .messageDescription(e.getMessage())
                     .build();
         }
+    }
+
+    @Override
+    public List<FacturaConsultaResponse> consultarFacturaXNomcliente(String cliente) {
+        return facturaRepository.consultarFacturaXNomcliente(cliente);
     }
 
     private List<FacturaPedidoResponse> convertirListFacturaPedidoResponse(List<Factura> facturas) {

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import pe.edu.cibertec.qhatumana.model.bd.*;
 import pe.edu.cibertec.qhatumana.model.dto.request.pedido.anulacion.AnularPedidoRequest;
 import pe.edu.cibertec.qhatumana.model.dto.response.api.ResponseAPI;
+import pe.edu.cibertec.qhatumana.model.dto.response.pedido.anulacion.AnularPedidoConsultaResponse;
 import pe.edu.cibertec.qhatumana.model.dto.response.pedido.anulacion.AnularPedidoResponse;
 import pe.edu.cibertec.qhatumana.repository.*;
 import pe.edu.cibertec.qhatumana.service.interfaces.IAnularPedidoService;
@@ -94,6 +95,11 @@ public class AnularPedidoService implements IAnularPedidoService {
                 .data(convertirAnularPedidoResponse(pedidosave))
                 .httpStatus(HttpStatus.OK.value())
                 .build();
+    }
+
+    @Override
+    public List<AnularPedidoConsultaResponse> consularAnulacionPedidoXCliente(String cliente) {
+        return anulacionPedidoRepository.consularAnulacionPedidoXCliente(cliente);
     }
 
     private List<AnularPedidoResponse> convertirListAnularPedidoResponse(List<AnulacionPedido> anulacionPedidos) {

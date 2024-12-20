@@ -8,6 +8,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.cibertec.qhatumana.model.dto.request.pedido.anulacion.AnularPedidoRequest;
 import pe.edu.cibertec.qhatumana.model.dto.response.api.ResponseAPI;
+import pe.edu.cibertec.qhatumana.model.dto.response.pedido.anulacion.AnularPedidoConsultaResponse;
 import pe.edu.cibertec.qhatumana.model.dto.response.pedido.anulacion.AnularPedidoResponse;
 import pe.edu.cibertec.qhatumana.service.interfaces.IAnularPedidoService;
 
@@ -33,5 +34,14 @@ public class AnularPedidoController {
     public ResponseEntity<ResponseAPI<AnularPedidoResponse>> registrarAnulacionPedido(@RequestBody AnularPedidoRequest request) {
         ResponseAPI<AnularPedidoResponse> responseAPI = anularPedidoService.anularPedido(request);
         return new ResponseEntity<>(responseAPI, HttpStatusCode.valueOf(responseAPI.getHttpStatus()));
+    }
+
+    @GetMapping("/consultaranulacionpedido")
+    public ResponseEntity<List<AnularPedidoConsultaResponse>> consultarAnulacionPedidoXCliente(@RequestParam("cliente") String cliente) {
+        List<AnularPedidoConsultaResponse> response = anularPedidoService.consularAnulacionPedidoXCliente(cliente);
+        if(CollectionUtils.isEmpty(response)) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
