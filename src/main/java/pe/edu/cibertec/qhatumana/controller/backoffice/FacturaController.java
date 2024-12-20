@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import pe.edu.cibertec.qhatumana.model.dto.request.pedido.factura.FacturaPedidoRequest;
 import pe.edu.cibertec.qhatumana.model.dto.request.pedido.factura.FacturaUpdatePedidoRequest;
 import pe.edu.cibertec.qhatumana.model.dto.response.api.ResponseAPI;
+import pe.edu.cibertec.qhatumana.model.dto.response.pedido.factura.FacturaConsultaResponse;
 import pe.edu.cibertec.qhatumana.model.dto.response.pedido.factura.FacturaPedidoResponse;
 import pe.edu.cibertec.qhatumana.service.interfaces.IFacturaService;
 
@@ -40,5 +41,14 @@ public class FacturaController {
     public ResponseEntity<ResponseAPI<FacturaPedidoResponse>> actualizarFactura(@RequestBody FacturaUpdatePedidoRequest request) {
         ResponseAPI<FacturaPedidoResponse> response = facturaService.updateFacturaUpdatePedidoReques(request);
         return new ResponseEntity<>(response, HttpStatusCode.valueOf(response.getHttpStatus()));
+    }
+
+    @GetMapping("/consultarfactura")
+    public ResponseEntity<List<FacturaConsultaResponse>> consultarFacturaXCliente(@RequestParam("cliente") String cliente) {
+        List<FacturaConsultaResponse> response = facturaService.consultarFacturaXNomcliente(cliente);
+        if(CollectionUtils.isEmpty(response)) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(response,HttpStatus.OK);
     }
 }

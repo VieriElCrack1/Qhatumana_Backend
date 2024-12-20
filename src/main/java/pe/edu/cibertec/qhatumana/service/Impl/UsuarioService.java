@@ -1,6 +1,8 @@
 package pe.edu.cibertec.qhatumana.service.Impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataAccessException;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -13,18 +15,23 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import pe.edu.cibertec.qhatumana.model.bd.Rol;
 import pe.edu.cibertec.qhatumana.model.bd.Usuario;
 import pe.edu.cibertec.qhatumana.model.dto.request.auth.AuthCreateUserRequest;
 import pe.edu.cibertec.qhatumana.model.dto.request.auth.AuthLoginRequest;
+import pe.edu.cibertec.qhatumana.model.dto.request.usuario.UsuarioRequest;
 import pe.edu.cibertec.qhatumana.model.dto.response.UsuarioResponse;
 import pe.edu.cibertec.qhatumana.model.dto.response.auth.AuthResponse;
+import pe.edu.cibertec.qhatumana.model.dto.response.usuario.UsuarioPerfilResponse;
 import pe.edu.cibertec.qhatumana.repository.RolRepository;
 import pe.edu.cibertec.qhatumana.repository.UsuarioRepository;
 import pe.edu.cibertec.qhatumana.service.interfaces.IUsuarioService;
 import pe.edu.cibertec.qhatumana.util.exception.handler.ResourceNotFoundException;
+import pe.edu.cibertec.qhatumana.util.firebase.storage.ArchivoService;
 import pe.edu.cibertec.qhatumana.util.jwt.JwtUtil;
 
+import java.io.File;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
@@ -37,6 +44,7 @@ public class UsuarioService implements IUsuarioService, UserDetailsService {
     private final UsuarioRepository usuarioRepository;
     private final JwtUtil jwtUtils;
     private final BCryptPasswordEncoder passwordEncoder;
+    private final ArchivoService archivoService;
 
     @Override
     public Usuario guardarUsuario(Usuario usuario) {
@@ -54,6 +62,79 @@ public class UsuarioService implements IUsuarioService, UserDetailsService {
     @Override
     public UsuarioResponse buscarUsuario(int id) {
         return convertirUsuarioResponse(usuarioRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No se encontro el usuario")));
+    }
+
+    @Override
+    public UsuarioPerfilResponse actualizarUsuarioConImagen(Integer idusuario, MultipartFile file) {
+        try {
+            Usuario usuario = usuarioRepository.findById(idusuario).orElseThrow(() -> new ResourceNotFoundException("No se encontró el usuario"));
+            //archivo foto
+            String nombreArchivo = file.getOriginalFilename();
+            File archivo = archivoService.convertToFile(file);
+            String contenido = file.getContentType();
+            String imagenUrl = archivoService.uploadFile(archivo, nombreArchivo, contenido, "usuarios");
+            usuario.setNomfoto(nombreArchivo);
+            usuario.setUrlfoto(imagenUrl);
+            usuarioRepository.actualizarUsuarioConImagen(usuario.getUrlfoto(), usuario.getNomfoto(), idusuario);
+            return UsuarioPerfilResponse.builder()
+                    .message("Guardado Exitosamente")
+                    .status(HttpStatus.OK.value())
+                    .build();
+        }catch (DataAccessException e) {
+            return UsuarioPerfilResponse.builder()
+                    .message("Error no se pudo acceder a la base de datos.")
+                    .messagedescrip(e.getMessage())
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                    .build();
+        }catch (NullPointerException e) {
+            return UsuarioPerfilResponse.builder()
+                    .message("Error los valores enviados son vacios.")
+                    .messagedescrip(e.getMessage())
+                    .status(HttpStatus.NO_CONTENT.value())
+                    .build();
+        }catch (Exception e) {
+            return UsuarioPerfilResponse.builder()
+                    .message("Error en modificar el perfil de usuario.")
+                    .messagedescrip(e.getMessage())
+                    .status(HttpStatus.BAD_REQUEST.value())
+                    .build();
+        }
+    }
+
+    @Override
+    public UsuarioPerfilResponse actualizarUsuarioSinImagen(UsuarioRequest request) {
+        try {
+            Usuario usuario = usuarioRepository.findById(request.getIdusuario()).orElseThrow(() -> new ResourceNotFoundException("No se encontró el usuario"));
+            usuario.setNomusuario(request.getNombre());
+            usuario.setApeusuario(request.getApeusuario());
+            usuario.setUsername(request.getEmail());
+            usuario.setReppassword(request.getPassword());
+            usuario.setPassword(passwordEncoder.encode(request.getPassword()));
+            usuario.setDni(request.getDni());
+            usuarioRepository.actualizarUsuarioSinImagen(request.getNombre(), request.getApeusuario(), request.getEmail(), usuario.getPassword(), usuario.getReppassword(), request.getDni(), request.getIdusuario());
+            return UsuarioPerfilResponse.builder()
+                    .message("Guardado Exitosamente")
+                    .status(HttpStatus.OK.value())
+                    .build();
+        }catch (DataAccessException e) {
+            return UsuarioPerfilResponse.builder()
+                    .message("Error no se pudo acceder a la base de datos.")
+                    .messagedescrip(e.getMessage())
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                    .build();
+        }catch (NullPointerException e) {
+            return UsuarioPerfilResponse.builder()
+                    .message("Error los valores enviados son vacios.")
+                    .messagedescrip(e.getMessage())
+                    .status(HttpStatus.NO_CONTENT.value())
+                    .build();
+        }catch (Exception e) {
+            return UsuarioPerfilResponse.builder()
+                    .message("Error en modificar el perfil de usuario sin imagen.")
+                    .messagedescrip(e.getMessage())
+                    .status(HttpStatus.BAD_REQUEST.value())
+                    .build();
+        }
     }
 
     @Override
