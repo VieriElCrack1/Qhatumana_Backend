@@ -24,23 +24,18 @@ public class PedidoController {
 
     private final IPedidoService pedidoService;
 
+    @GetMapping("/valorid")
+    public ResponseEntity<Integer> valorId() {
+        return new ResponseEntity<>(pedidoService.obtenerMaximoIdPedido(), HttpStatus.OK);
+    }
+
     @GetMapping("/lista")
-    public ResponseAPI<List<PedidoListResponse>> listaPedido() {
+    public ResponseEntity<List<PedidoListResponse>> listaPedido() {
         List<PedidoListResponse> response = pedidoService.listaPedidos();
         if(CollectionUtils.isEmpty(response)) {
-            return ResponseAPI.<List<PedidoListResponse>>builder()
-                    .message("No se encontro ningun pedido registrado")
-                    .status("EXITO")
-                    .httpStatus(HttpStatus.OK.value())
-                    .data(response)
-                    .build();
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return ResponseAPI.<List<PedidoListResponse>>builder()
-                .message("Pedidos Encontrados")
-                .status("EXITO")
-                .httpStatus(HttpStatus.OK.value())
-                .data(response)
-                .build();
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping("/registrar")
@@ -73,5 +68,14 @@ public class PedidoController {
             return new ResponseEntity<>(respuesta, HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(respuesta, HttpStatus.OK);
+    }
+
+    @GetMapping("/consultarpedido")
+    public ResponseEntity<List<PedidoListResponse>> consultarPedidoXNomprod(@RequestParam("nomcliente") String nomcliente) {
+        List<PedidoListResponse> response = pedidoService.consultarPedido(nomcliente);
+        if(CollectionUtils.isEmpty(response)) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(response,HttpStatus.OK);
     }
 }

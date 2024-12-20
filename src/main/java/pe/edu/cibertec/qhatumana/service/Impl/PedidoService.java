@@ -258,6 +258,16 @@ public class PedidoService implements IPedidoService {
         return convertirPedidoResponse(pedidoRepository.findById(idpedido).orElseThrow(() -> new ResourceNotFoundException("No se encontro ningun pedido al id : " + idpedido)));
     }
 
+    @Override
+    public int obtenerMaximoIdPedido() {
+        return pedidoRepository.obtenerMaximoIdPedido();
+    }
+
+    @Override
+    public List<PedidoListResponse> consultarPedido(String nomcliente) {
+        return pedidoRepository.consultarPedido(nomcliente);
+    }
+
     private List<PedidoListResponse> convertirPedidosListResponse(List<Pedido> pedidos) {
         List<PedidoListResponse> response = new ArrayList<>();
         for (Pedido pedido : pedidos) {

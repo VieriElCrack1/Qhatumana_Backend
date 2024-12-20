@@ -13,4 +13,6 @@ public interface IPedidoService {
     ResponseAPI<PedidoResponse> registrarPedido(PedidoAndDetalleCreateRequest request);
     ResponseAPI<PedidoResponse> actualizarPedido(PedidoAndDetalleUpdateRequest request);
     PedidoResponse buscarPedido(int idpedido);
+    int obtenerMaximoIdPedido();
+    List<PedidoListResponse> consultarPedido(String nomcliente);
 }

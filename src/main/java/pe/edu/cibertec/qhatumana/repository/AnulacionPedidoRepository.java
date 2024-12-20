@@ -6,4 +6,5 @@ import pe.edu.cibertec.qhatumana.model.bd.AnulacionPedido;
 
 @Repository
 public interface AnulacionPedidoRepository extends JpaRepository<AnulacionPedido, Integer> {
+
 }
