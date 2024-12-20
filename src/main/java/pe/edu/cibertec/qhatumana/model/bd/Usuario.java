@@ -1,5 +1,6 @@
 package pe.edu.cibertec.qhatumana.model.bd;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -36,6 +37,7 @@ public class Usuario {
     @ManyToOne
     private Rol rol;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "usuario")
     private List<Pedido> pedidoList;
 

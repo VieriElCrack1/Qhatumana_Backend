@@ -17,10 +17,12 @@ import pe.edu.cibertec.qhatumana.model.bd.Rol;
 import pe.edu.cibertec.qhatumana.model.bd.Usuario;
 import pe.edu.cibertec.qhatumana.model.dto.request.auth.AuthCreateUserRequest;
 import pe.edu.cibertec.qhatumana.model.dto.request.auth.AuthLoginRequest;
+import pe.edu.cibertec.qhatumana.model.dto.response.UsuarioResponse;
 import pe.edu.cibertec.qhatumana.model.dto.response.auth.AuthResponse;
 import pe.edu.cibertec.qhatumana.repository.RolRepository;
 import pe.edu.cibertec.qhatumana.repository.UsuarioRepository;
 import pe.edu.cibertec.qhatumana.service.interfaces.IUsuarioService;
+import pe.edu.cibertec.qhatumana.util.exception.handler.ResourceNotFoundException;
 import pe.edu.cibertec.qhatumana.util.jwt.JwtUtil;
 
 import java.time.LocalDate;
@@ -47,6 +49,11 @@ public class UsuarioService implements IUsuarioService, UserDetailsService {
     @Override
     public Usuario iniciarSesion(String username) {
         return usuarioRepository.iniciarSesion(username);
+    }
+
+    @Override
+    public UsuarioResponse buscarUsuario(int id) {
+        return convertirUsuarioResponse(usuarioRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No se encontro el usuario")));
     }
 
     @Override
@@ -143,5 +150,17 @@ public class UsuarioService implements IUsuarioService, UserDetailsService {
         }
 
         return new UsernamePasswordAuthenticationToken(username, password, userDetails.getAuthorities());
+    }
+
+    private UsuarioResponse convertirUsuarioResponse(Usuario usuario) {
+        return UsuarioResponse.builder()
+                .idusuario(usuario.getIdusuario())
+                .nomusuario(usuario.getNomusuario())
+                .apeusuario(usuario.getApeusuario())
+                .email(usuario.getUsername())
+                .dni(usuario.getDni())
+                .urlfoto(usuario.getUrlfoto())
+                .estado(usuario.getEstado() ? "Activo" : "Inactivo")
+                .build();
     }
 }

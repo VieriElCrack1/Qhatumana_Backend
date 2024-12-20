@@ -9,10 +9,12 @@ import pe.edu.cibertec.qhatumana.model.bd.MetodoPago;
 import pe.edu.cibertec.qhatumana.model.bd.PagoPedido;
 import pe.edu.cibertec.qhatumana.model.bd.Pedido;
 import pe.edu.cibertec.qhatumana.model.dto.request.pedido.pago.PagoPedidoRequest;
+import pe.edu.cibertec.qhatumana.model.dto.request.pedido.pago.PagoPedidoUpdateRequest;
 import pe.edu.cibertec.qhatumana.model.dto.response.api.ResponseAPI;
 import pe.edu.cibertec.qhatumana.model.dto.response.pedido.PedidoResponse;
 import pe.edu.cibertec.qhatumana.model.dto.response.pedido.detalle.DetallePedidoResponse;
 import pe.edu.cibertec.qhatumana.model.dto.response.pedido.pago.MetodoPagoResponse;
+import pe.edu.cibertec.qhatumana.model.dto.response.pedido.pago.PagoPedidoConsultaResponse;
 import pe.edu.cibertec.qhatumana.model.dto.response.pedido.pago.PagoPedidoResponse;
 import pe.edu.cibertec.qhatumana.repository.MetodoPagoRepository;
 import pe.edu.cibertec.qhatumana.repository.PagoPedidoRepository;
@@ -59,6 +61,15 @@ public class PagoPedidoService implements IPagoPedidoService {
                         .build();
             }
 
+            if (request.getIdpedido() == null || request.getIdmetodoPago() == null) {
+                return ResponseAPI.<PagoPedidoResponse>builder()
+                        .message("Los campos ID de pedido y método de pago no pueden ser nulos")
+                        .status("ERROR")
+                        .httpStatus(HttpStatus.BAD_REQUEST.value())
+                        .errorCode(HttpStatus.BAD_REQUEST.name())
+                        .build();
+            }
+
             pagoPedido.setPedido(pedido);
             pagoPedido.setMontopagado(pedido.getMontototal());
 
@@ -91,6 +102,44 @@ public class PagoPedidoService implements IPagoPedidoService {
                     .errorCode(HttpStatus.BAD_REQUEST.name())
                     .build();
         }
+    }
+
+    @Override
+    public ResponseAPI<PagoPedidoResponse> actualizarPagoPedido(PagoPedidoUpdateRequest request) {
+        try{
+            PagoPedido pagoPedido = pagoPedidoRepository.findById(request.getIdpago()).orElseThrow(() -> new ResourceNotFoundException("No se encontro ningún pago pedido"));
+
+            pagoPedido.setEstado(request.getEstado());
+
+            PagoPedido update = pagoPedidoRepository.save(pagoPedido);
+            return ResponseAPI.<PagoPedidoResponse>builder()
+                    .message("Pago pedido modificado exitosamente")
+                    .status("EXITO")
+                    .httpStatus(HttpStatus.OK.value())
+                    .data(convertirPagoPedidoResponse(update))
+                    .build();
+        }catch (DataAccessException exception) {
+            return ResponseAPI.<PagoPedidoResponse>builder()
+                    .message("No se pudo modificar el pago de pedido, no se pudo acceder a la base de datos")
+                    .status("ERROR")
+                    .httpStatus(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                    .messageDescription(exception.getMessage())
+                    .errorCode(HttpStatus.INTERNAL_SERVER_ERROR.name())
+                    .build();
+        }catch (Exception e) {
+            return ResponseAPI.<PagoPedidoResponse>builder()
+                    .message("No se pudo modificar el pago de pedido")
+                    .status("ERROR")
+                    .httpStatus(HttpStatus.BAD_REQUEST.value())
+                    .messageDescription(e.getMessage())
+                    .errorCode(HttpStatus.BAD_REQUEST.name())
+                    .build();
+        }
+    }
+
+    @Override
+    public List<PagoPedidoConsultaResponse> consultarPagoPedidoXnomcliente(String cliente) {
+        return pagoPedidoRepository.consultarPagoPedidoXnomcliente(cliente);
     }
 
     //List Pago pedido
