@@ -30,6 +30,6 @@ public interface PedidoRepository extends JpaRepository<Pedido, Integer> {
             " WHERE (LOWER(concat(p.cliente.nomcliente, ' ', p.cliente.apecliente)) LIKE LOWER(CONCAT('%', :cliente, '%')) OR :cliente IS NULL OR :cliente = '')" +
             " AND p.estadoPedido.idestado = :idestado" +
             " GROUP BY p.idpedido, p.cliente.nomcliente, p.cliente.apecliente, p.usuario.nomusuario, p.usuario.apeusuario, p.descuento, p.montototal, p.direccion, p.estadoPedido.nomestado" +
-            " ORDER BY p.fechapedido DESC")
+            " ORDER BY p.idpedido DESC")
     List<PedidoListResponse> consultarPedidoRegister(@Param("cliente") String cliente, @Param("idestado") Integer idestado);
 }

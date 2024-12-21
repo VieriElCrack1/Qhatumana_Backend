@@ -112,7 +112,7 @@ where pe.idPedido = $P{idpedido} and f.estadoFactura = 1]]>
 		<variableExpression><![CDATA[String.valueOf(Math.round($F{descuento} * 100)) + " %"]]></variableExpression>
 	</variable>
 	<variable name="calcularDescuentoSubTotal" class="java.lang.Double">
-		<variableExpression><![CDATA[Math.round($F{subtotal} * $F{descuento} * 100.0) / 100.0]]></variableExpression>
+		<variableExpression><![CDATA[Math.round($V{subtotaligv} * $F{descuento} * 100.0) / 100.0]]></variableExpression>
 	</variable>
 	<variable name="igvcalculo" class="java.lang.Double">
 		<variableExpression><![CDATA[Math.round(($V{subtotaligv} - $V{calcularDescuentoSubTotal}) * 0.18 * 100.0) / 100.0]]></variableExpression>
