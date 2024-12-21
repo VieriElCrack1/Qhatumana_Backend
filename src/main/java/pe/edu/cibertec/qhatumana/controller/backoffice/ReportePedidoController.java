@@ -31,10 +31,9 @@ public class ReportePedidoController {
     }
 
     @GetMapping("/reportesemanal")
-    public ResponseEntity<List<PedidoListResponse>> reporteSemanal(@RequestParam("dia") int dia,
-                                                                   @RequestParam("fechainicio") LocalDate fechainicio,
-                                                                   @RequestParam("fechafin") LocalDate fechafin) {
-        List<PedidoListResponse> response = pedidoService.reportePedidoSemanal(dia, fechainicio, fechafin);
+    public ResponseEntity<List<PedidoListResponse>> reporteSemanal(@RequestParam(value = "fechainicio", required = false) LocalDate fechainicio,
+                                                                   @RequestParam(value = "fechafin", required = false) LocalDate fechafin) {
+        List<PedidoListResponse> response = pedidoService.reportePedidoSemanal(fechainicio, fechafin);
         if (CollectionUtils.isEmpty(response)) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }

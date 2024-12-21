@@ -20,6 +20,6 @@ public interface IPedidoService {
 
     //REPORTES
     List<PedidoListResponse> reportePedidoDiario();
-    List<PedidoListResponse> reportePedidoSemanal(int dia, LocalDate fechainicio, LocalDate fechafin);
+    List<PedidoListResponse> reportePedidoSemanal(LocalDate fechainicio, LocalDate fechafin);
     List<PedidoListResponse> reportePedidoMensual(int mes);
 }
