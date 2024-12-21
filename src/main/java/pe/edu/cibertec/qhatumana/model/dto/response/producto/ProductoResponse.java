@@ -13,4 +13,5 @@ public class ProductoResponse {
     private Integer stock;
     private String urlproducto;
     private String nomcategoria;
+    private Boolean estado;
 }

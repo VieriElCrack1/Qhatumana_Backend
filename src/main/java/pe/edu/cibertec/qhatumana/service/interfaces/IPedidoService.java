@@ -15,4 +15,5 @@ public interface IPedidoService {
     PedidoResponse buscarPedido(int idpedido);
     int obtenerMaximoIdPedido();
     List<PedidoListResponse> consultarPedido(String nomcliente);
+    List<PedidoListResponse> consultarPedidoRegister(String cliente, Integer idestado);
 }
