@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import pe.edu.cibertec.qhatumana.model.bd.Pedido;
 import pe.edu.cibertec.qhatumana.model.dto.response.pedido.PedidoListResponse;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -32,4 +33,29 @@ public interface PedidoRepository extends JpaRepository<Pedido, Integer> {
             " GROUP BY p.idpedido, p.cliente.nomcliente, p.cliente.apecliente, p.usuario.nomusuario, p.usuario.apeusuario, p.descuento, p.montototal, p.direccion, p.estadoPedido.nomestado" +
             " ORDER BY p.idpedido DESC")
     List<PedidoListResponse> consultarPedidoRegister(@Param("cliente") String cliente, @Param("idestado") Integer idestado);
+
+    @Query("SELECT new pe.edu.cibertec.qhatumana.model.dto.response.pedido.PedidoListResponse(p.idpedido,concat(p.cliente.nomcliente,' ', p.cliente.apecliente),concat(p.usuario.nomusuario,' ', p.usuario.apeusuario),p.descuento,p.montototal,p.direccion,p.estadoPedido.nomestado)" +
+            " FROM Pedido p" +
+            " JOIN p.detallePedidoList dp" +
+            " JOIN dp.producto prod" +
+            " WHERE CAST(p.fechapedido AS DATE) = current_date" +
+            " GROUP BY p.idpedido, p.cliente.nomcliente, p.cliente.apecliente, p.usuario.nomusuario, p.usuario.apeusuario, p.descuento, p.montototal, p.direccion, p.estadoPedido.nomestado")
+    List<PedidoListResponse> reportePedidoDiario();
+
+    @Query("SELECT new pe.edu.cibertec.qhatumana.model.dto.response.pedido.PedidoListResponse(p.idpedido,concat(p.cliente.nomcliente,' ', p.cliente.apecliente),concat(p.usuario.nomusuario,' ', p.usuario.apeusuario),p.descuento,p.montototal,p.direccion,p.estadoPedido.nomestado)" +
+            " FROM Pedido p" +
+            " JOIN p.detallePedidoList dp" +
+            " JOIN dp.producto prod" +
+            " WHERE (DAYOFWEEK(p.fechapedido) = :dia)" +
+            " OR (p.fechapedido BETWEEN :fechainicio AND :fechafin) " +
+            " GROUP BY p.idpedido, p.cliente.nomcliente, p.cliente.apecliente, p.usuario.nomusuario, p.usuario.apeusuario, p.descuento, p.montototal, p.direccion, p.estadoPedido.nomestado")
+    List<PedidoListResponse> reportePedidoSemanal(@Param("dia") int dia, @Param("fechainicio") LocalDate fechainicio, @Param("fechafin") LocalDate fechafin);
+
+    @Query("SELECT new pe.edu.cibertec.qhatumana.model.dto.response.pedido.PedidoListResponse(p.idpedido,concat(p.cliente.nomcliente,' ', p.cliente.apecliente),concat(p.usuario.nomusuario,' ', p.usuario.apeusuario),p.descuento,p.montototal,p.direccion,p.estadoPedido.nomestado)" +
+            " FROM Pedido p" +
+            " JOIN p.detallePedidoList dp" +
+            " JOIN dp.producto prod" +
+            " WHERE MONTH(p.fechapedido) = :mes " +
+            " GROUP BY p.idpedido, p.cliente.nomcliente, p.cliente.apecliente, p.usuario.nomusuario, p.usuario.apeusuario, p.descuento, p.montototal, p.direccion, p.estadoPedido.nomestado")
+    List<PedidoListResponse> reportePedidoMensual(@Param("mes") int mes);
 }
