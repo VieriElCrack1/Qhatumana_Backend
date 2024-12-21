@@ -67,7 +67,7 @@ public class PedidoService implements IPedidoService {
             pedido.setEstadoPedido(estadoPedido);
 
             List<DetallePedido> detallePedidos = new ArrayList<>();
-            double calcularDescuento = 0.0;
+            double acumuladorSubtotal = 0.0;
             double formatearDescuento = request.getDescuento() / 100;
             for (DetallePedidoCreateRequest detalleRequest : request.getDetalles()) {
                 DetallePedido detalle = new DetallePedido();
@@ -95,13 +95,15 @@ public class PedidoService implements IPedidoService {
 
                 double subtotal = precioUnitario * detalleRequest.getCantidad(); // Calculamos el subtotal
                 detalle.setSubtotal(subtotal);
-                calcularDescuento += subtotal;
+                acumuladorSubtotal += subtotal;
                 detallePedidos.add(detalle);
             }
 
-            double montoDescuento = calcularDescuento * formatearDescuento;
-            double igvMontoDescuento = montoDescuento * 0.18;
-            double montoTotal = (calcularDescuento - montoDescuento) + igvMontoDescuento;
+            //subtotal 40.4
+            double montoDescuento = acumuladorSubtotal * formatearDescuento;//4.04
+            double descuentoCalculo = acumuladorSubtotal - montoDescuento;//36.36
+            double igvMonto = descuentoCalculo * 0.18;//6.5
+            double montoTotal = descuentoCalculo + igvMonto;
 
             pedido.setMontototal(montoTotal);
 
@@ -177,7 +179,7 @@ public class PedidoService implements IPedidoService {
             pedido.setEstadoPedido(estadoPedido);
 
             List<DetallePedido> detallePedidos = new ArrayList<>();
-            double calcularDescuento = 0.0;
+            double acumuladorSubtotal = 0.0;
             double formatearDescuento = request.getDescuento() / 100;
 
             for (DetallePedidoUpdateRequest detalleRequest : request.getDetalles()) {
@@ -215,13 +217,14 @@ public class PedidoService implements IPedidoService {
 
                 double subtotal = precioUnitario * detalleRequest.getCantidad(); // Calculamos el subtotal
                 detalle.setSubtotal(subtotal);
-                calcularDescuento += subtotal;
+                acumuladorSubtotal += subtotal;
                 detallePedidos.add(detalle);
             }
-
-            double montoDescuento = calcularDescuento * formatearDescuento;
-            double igvMontoDescuento = montoDescuento * 0.18;
-            double montoTotal = (calcularDescuento - montoDescuento) + igvMontoDescuento;
+            //subtotal 40.4
+            double montoDescuento = acumuladorSubtotal * formatearDescuento;//4.04
+            double descuentoCalculo = acumuladorSubtotal - montoDescuento;
+            double igvMonto = descuentoCalculo * 0.18;
+            double montoTotal = descuentoCalculo + igvMonto;
 
             pedido.setMontototal(montoTotal);
 
