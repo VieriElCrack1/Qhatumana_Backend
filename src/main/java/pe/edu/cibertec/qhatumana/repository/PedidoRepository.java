@@ -46,10 +46,10 @@ public interface PedidoRepository extends JpaRepository<Pedido, Integer> {
             " FROM Pedido p" +
             " JOIN p.detallePedidoList dp" +
             " JOIN dp.producto prod" +
-            " WHERE (DAYOFWEEK(p.fechapedido) = :dia)" +
-            " OR (p.fechapedido BETWEEN :fechainicio AND :fechafin) " +
+            " WHERE (p.fechapedido BETWEEN :fechainicio AND :fechafin)" +
+            " OR (:fechainicio IS NULL AND :fechafin IS NULL) " +
             " GROUP BY p.idpedido, p.cliente.nomcliente, p.cliente.apecliente, p.usuario.nomusuario, p.usuario.apeusuario, p.descuento, p.montototal, p.direccion, p.estadoPedido.nomestado")
-    List<PedidoListResponse> reportePedidoSemanal(@Param("dia") int dia, @Param("fechainicio") LocalDate fechainicio, @Param("fechafin") LocalDate fechafin);
+    List<PedidoListResponse> reportePedidoSemanal(@Param("fechainicio") LocalDate fechainicio, @Param("fechafin") LocalDate fechafin);
 
     @Query("SELECT new pe.edu.cibertec.qhatumana.model.dto.response.pedido.PedidoListResponse(p.idpedido,concat(p.cliente.nomcliente,' ', p.cliente.apecliente),concat(p.usuario.nomusuario,' ', p.usuario.apeusuario),p.descuento,p.montototal,p.direccion,p.estadoPedido.nomestado)" +
             " FROM Pedido p" +

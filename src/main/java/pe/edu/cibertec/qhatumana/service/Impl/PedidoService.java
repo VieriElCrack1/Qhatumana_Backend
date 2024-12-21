@@ -33,7 +33,6 @@ public class PedidoService implements IPedidoService {
     private final UsuarioRepository usuarioRepository;
     private final EstadoPedidoRepository estadoPedidoRepository;
     private final DetallePedidoRepository detallePedidoRepository;
-    private final FacturaRepository facturaRepository;
 
     @Override
     public List<PedidoListResponse> listaPedidos() {
@@ -282,8 +281,8 @@ public class PedidoService implements IPedidoService {
     }
 
     @Override
-    public List<PedidoListResponse> reportePedidoSemanal(int dia, LocalDate fechainicio, LocalDate fechafin) {
-        return pedidoRepository.reportePedidoSemanal(dia, fechainicio, fechafin);
+    public List<PedidoListResponse> reportePedidoSemanal(LocalDate fechainicio, LocalDate fechafin) {
+        return pedidoRepository.reportePedidoSemanal(fechainicio, fechafin);
     }
 
     @Override
