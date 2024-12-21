@@ -268,6 +268,11 @@ public class PedidoService implements IPedidoService {
         return pedidoRepository.consultarPedido(nomcliente);
     }
 
+    @Override
+    public List<PedidoListResponse> consultarPedidoRegister(String cliente, Integer idestado) {
+        return pedidoRepository.consultarPedidoRegister(cliente, idestado);
+    }
+
     private List<PedidoListResponse> convertirPedidosListResponse(List<Pedido> pedidos) {
         List<PedidoListResponse> response = new ArrayList<>();
         for (Pedido pedido : pedidos) {

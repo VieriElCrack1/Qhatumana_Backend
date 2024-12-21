@@ -71,8 +71,17 @@ public class PedidoController {
     }
 
     @GetMapping("/consultarpedido")
-    public ResponseEntity<List<PedidoListResponse>> consultarPedidoXNomprod(@RequestParam("nomcliente") String nomcliente) {
+    public ResponseEntity<List<PedidoListResponse>> consultarPedidoXCliente(@RequestParam("nomcliente") String nomcliente) {
         List<PedidoListResponse> response = pedidoService.consultarPedido(nomcliente);
+        if(CollectionUtils.isEmpty(response)) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(response,HttpStatus.OK);
+    }
+
+    @GetMapping("/consultarpedidoestado")
+    public ResponseEntity<List<PedidoListResponse>> consultarPedidoXClienteAndIdestado(@RequestParam("cliente") String cliente, @RequestParam("idestado") Integer idestado) {
+        List<PedidoListResponse> response = pedidoService.consultarPedidoRegister(cliente, idestado);
         if(CollectionUtils.isEmpty(response)) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }

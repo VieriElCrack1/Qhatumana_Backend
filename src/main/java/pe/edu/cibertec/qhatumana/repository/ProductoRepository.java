@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public interface ProductoRepository extends JpaRepository<Producto, Integer> {
 
-    @Query("SELECT new pe.edu.cibertec.qhatumana.model.dto.response.producto.ProductoResponse(p.idproducto,p.nomproducto,p.descrip,p.precio,p.stock,p.urlproducto,c.nomcategoria) " +
+    @Query("SELECT new pe.edu.cibertec.qhatumana.model.dto.response.producto.ProductoResponse(p.idproducto,p.nomproducto,p.descrip,p.precio,p.stock,p.urlproducto,c.nomcategoria,p.estado) " +
             " FROM Producto p" +
             " JOIN p.categoria c")
     List<ProductoResponse> listadoProductos();
