@@ -6,6 +6,7 @@ import pe.edu.cibertec.qhatumana.model.dto.response.api.ResponseAPI;
 import pe.edu.cibertec.qhatumana.model.dto.response.pedido.PedidoListResponse;
 import pe.edu.cibertec.qhatumana.model.dto.response.pedido.PedidoResponse;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface IPedidoService {
@@ -16,4 +17,9 @@ public interface IPedidoService {
     int obtenerMaximoIdPedido();
     List<PedidoListResponse> consultarPedido(String nomcliente);
     List<PedidoListResponse> consultarPedidoRegister(String cliente, Integer idestado);
+
+    //REPORTES
+    List<PedidoListResponse> reportePedidoDiario();
+    List<PedidoListResponse> reportePedidoSemanal(int dia, LocalDate fechainicio, LocalDate fechafin);
+    List<PedidoListResponse> reportePedidoMensual(int mes);
 }

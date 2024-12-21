@@ -276,6 +276,21 @@ public class PedidoService implements IPedidoService {
         return pedidoRepository.consultarPedidoRegister(cliente, idestado);
     }
 
+    @Override
+    public List<PedidoListResponse> reportePedidoDiario() {
+        return pedidoRepository.reportePedidoDiario();
+    }
+
+    @Override
+    public List<PedidoListResponse> reportePedidoSemanal(int dia, LocalDate fechainicio, LocalDate fechafin) {
+        return pedidoRepository.reportePedidoSemanal(dia, fechainicio, fechafin);
+    }
+
+    @Override
+    public List<PedidoListResponse> reportePedidoMensual(int mes) {
+        return pedidoRepository.reportePedidoMensual(mes);
+    }
+
     private List<PedidoListResponse> convertirPedidosListResponse(List<Pedido> pedidos) {
         List<PedidoListResponse> response = new ArrayList<>();
         for (Pedido pedido : pedidos) {
