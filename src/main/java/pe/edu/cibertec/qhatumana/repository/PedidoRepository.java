@@ -46,8 +46,7 @@ public interface PedidoRepository extends JpaRepository<Pedido, Integer> {
             " FROM Pedido p" +
             " JOIN p.detallePedidoList dp" +
             " JOIN dp.producto prod" +
-            " WHERE (p.fechapedido BETWEEN :fechainicio AND :fechafin)" +
-            " OR (:fechainicio IS NULL AND :fechafin IS NULL) " +
+            " WHERE p.fechapedido BETWEEN :fechainicio AND :fechafin" +
             " GROUP BY p.idpedido, p.cliente.nomcliente, p.cliente.apecliente, p.usuario.nomusuario, p.usuario.apeusuario, p.descuento, p.montototal, p.direccion, p.estadoPedido.nomestado")
     List<PedidoListResponse> reportePedidoSemanal(@Param("fechainicio") LocalDate fechainicio, @Param("fechafin") LocalDate fechafin);
 
